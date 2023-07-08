@@ -18,11 +18,12 @@ recycler-view = "1.3.0"
 retrofit = "2.9.0"
 moshi = "1.14.0"
 lifecycle = "2.6.1"
+datastore = "1.0.0"
 
 [bundles]
 nav = ["nav-fragment", "nav-ui"]
 testing = ["androidx-test-ext", "androidx-test-espresso"]
-androidx = ["androidx-appcompat", "androidx-core", "androidx-constraintlayout", "androidx-recycler-view", "lifecycle-livedata", "lifecycle-viewmodel", "lifecycle-runtime"]
+androidx = ["androidx-appcompat", "androidx-core", "androidx-constraintlayout", "androidx-recycler-view", "lifecycle-livedata", "lifecycle-viewmodel", "lifecycle-runtime", "datastore"]
 retrofit = ["retrofit-moshi", "moshi"]
 
 [libraries]
@@ -45,6 +46,7 @@ retrofit-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.re
 moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
 # default dependancies / androidx
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 android-material = { module = "com.google.android.material:material", version.ref = "m3" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
