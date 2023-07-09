@@ -44,4 +44,6 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="request_fragment_label">Celestidesk</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
 </resources>

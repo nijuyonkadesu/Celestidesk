@@ -1,4 +1,4 @@
-package one.njk.celestidesk
+package one.njk.celestidesk.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
