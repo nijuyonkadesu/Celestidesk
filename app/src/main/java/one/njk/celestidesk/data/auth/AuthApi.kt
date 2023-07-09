@@ -7,7 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 
-const val BASE_URL = "https://celestidesk.onrender.com/api/employee"
 interface AuthApi {
 
     @POST("signup")
@@ -15,8 +14,8 @@ interface AuthApi {
         @Body request: AuthSignUpRequest
     ): TokenResponse
 
-    @POST("signin")
-    suspend fun signIn(
+    @POST("login")
+    suspend fun logIn(
         @Body request: AuthLoginRequest
     ): TokenResponse
 

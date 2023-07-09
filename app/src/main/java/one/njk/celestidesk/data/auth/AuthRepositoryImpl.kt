@@ -26,10 +26,11 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun signIn(user: AuthLoginRequest): AuthResult<Unit> {
+    override suspend fun logIn(user: AuthLoginRequest): AuthResult<Unit> {
         return try {
-            val respone = api.signIn(user)
-            pref.setToken(respone)
+            val response = api.logIn(user)
+            pref.setToken(response)
+            Log.d("network", response.message)
             AuthResult.Authorized()
         } catch (e: HttpException) {
             Log.d("network", e.message.toString())
@@ -37,6 +38,7 @@ class AuthRepositoryImpl(
             if(e.code() == 401) AuthResult.UnAuthorized()
             else AuthResult.UnknownError()
         } catch (e: Exception) {
+            Log.d("network", e.message.toString())
             AuthResult.UnknownError()
         }
     }

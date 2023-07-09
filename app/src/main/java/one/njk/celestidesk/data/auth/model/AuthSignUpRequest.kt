@@ -7,5 +7,5 @@ data class AuthSignUpRequest(
     val username: String,
     val orgHandle: String,
     val type: Role,
-    val passsword: String,
+    val password: String,
 )
