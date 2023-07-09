@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="one.njk.celestidesk.ui.LoginFragment"
+    android:padding="16dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username"
+        style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_marginTop="-200dp"
+        android:hint="@string/hint_username"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/profile">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName"
+            tools:text="nijuyonkadesu" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password"
+        style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/hint_password"
+        app:endIconMode="password_toggle"
+        app:layout_constraintTop_toBottomOf="@id/username"
+        app:layout_constraintLeft_toLeftOf="@id/username">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            tools:text="nijuyonkadesu" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="@string/login"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintStart_toStartOf="@+id/password"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:indeterminate="true"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/username"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
