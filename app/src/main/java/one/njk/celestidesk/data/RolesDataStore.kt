@@ -13,8 +13,8 @@ enum class Role {
 class RolesDataStore(private val context: Context) {
 
     companion object {
-        val Context.rolesDataStore by preferencesDataStore(name = "roles")
-        val ROLE = stringPreferencesKey("ROLE")
+        private val Context.rolesDataStore by preferencesDataStore(name = "roles")
+        private val ROLE = stringPreferencesKey("ROLE")
     }
 
     suspend fun setRole(role: Role) {
