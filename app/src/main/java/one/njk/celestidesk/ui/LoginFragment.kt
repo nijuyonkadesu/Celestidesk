@@ -14,12 +14,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.ViewModelLifecycle
 import kotlinx.coroutines.launch
-import one.njk.celestidesk.data.auth.model.AuthResult
+import one.njk.celestidesk.network.auth.model.AuthResult
 import one.njk.celestidesk.databinding.FragmentLoginBinding
 import one.njk.celestidesk.viewmodels.AuthViewModel
 

@@ -1,4 +1,4 @@
-package one.njk.celestidesk.data.auth.model
+package one.njk.celestidesk.network.auth.model
 
 import one.njk.celestidesk.data.Role
 

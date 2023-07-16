@@ -7,9 +7,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import one.njk.celestidesk.data.RolesDataStore
-import one.njk.celestidesk.data.auth.AuthApi
-import one.njk.celestidesk.data.auth.AuthRepository
-import one.njk.celestidesk.data.auth.AuthRepositoryImpl
+import one.njk.celestidesk.network.ApiService
+import one.njk.celestidesk.network.auth.AuthRepository
+import one.njk.celestidesk.network.auth.AuthRepositoryImpl
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
@@ -23,7 +23,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthApi(): AuthApi {
+    fun provideAuthApi(): ApiService {
         val moshi = Moshi
             .Builder()
             .add(KotlinJsonAdapterFactory())
@@ -38,7 +38,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(api: AuthApi, pref: RolesDataStore): AuthRepository{
+    fun provideAuthRepository(api: ApiService, pref: RolesDataStore): AuthRepository {
         return AuthRepositoryImpl(api, pref)
     }
 

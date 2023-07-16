@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
-import one.njk.celestidesk.data.auth.model.TokenResponse
+import one.njk.celestidesk.network.auth.model.TokenResponse
 
 enum class Role {
     EMPLOYEE, TEAM_LEAD, MANAGER

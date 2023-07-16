@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
-import one.njk.celestidesk.data.auth.AuthRepository
-import one.njk.celestidesk.data.auth.model.AuthLoginRequest
-import one.njk.celestidesk.data.auth.model.AuthResult
+import one.njk.celestidesk.network.auth.AuthRepository
+import one.njk.celestidesk.network.auth.model.AuthLoginRequest
+import one.njk.celestidesk.network.auth.model.AuthResult
 import javax.inject.Inject
 
 @HiltViewModel
