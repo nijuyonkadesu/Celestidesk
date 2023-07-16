@@ -1,11 +1,11 @@
-package one.njk.celestidesk.data
+package one.njk.celestidesk.database
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
-import one.njk.celestidesk.data.auth.model.TokenResponse
+import one.njk.celestidesk.network.auth.model.TokenResponse
 
 enum class Role {
     EMPLOYEE, TEAM_LEAD, MANAGER
@@ -27,7 +27,7 @@ class RolesDataStore(private val context: Context) {
 
     suspend fun getRole(): Role {
         val role = context.rolesDataStore.data.first()[ROLE]
-        return role?.let { Role.valueOf(it) } ?: Role.EMPLOYEE
+        return role?.let { Role.valueOf(it) } ?: Role.MANAGER
     }
 
     suspend fun getToken(): TokenResponse {

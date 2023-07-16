@@ -12,9 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
-import one.njk.celestidesk.data.RolesDataStore
 import one.njk.celestidesk.databinding.ActivityMainBinding
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

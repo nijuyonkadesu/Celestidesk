@@ -1,14 +1,15 @@
-package one.njk.celestidesk.data.auth
+package one.njk.celestidesk.network.auth
 
 import android.util.Log
-import one.njk.celestidesk.data.RolesDataStore
-import one.njk.celestidesk.data.auth.model.AuthLoginRequest
-import one.njk.celestidesk.data.auth.model.AuthResult
-import one.njk.celestidesk.data.auth.model.AuthSignUpRequest
+import one.njk.celestidesk.database.RolesDataStore
+import one.njk.celestidesk.network.auth.model.AuthLoginRequest
+import one.njk.celestidesk.network.auth.model.AuthResult
+import one.njk.celestidesk.network.auth.model.AuthSignUpRequest
+import one.njk.celestidesk.network.ApiService
 import retrofit2.HttpException
 
 class AuthRepositoryImpl(
-    private val api: AuthApi,
+    private val api: ApiService,
     private val pref: RolesDataStore
 ): AuthRepository {
     override suspend fun signUp(user: AuthSignUpRequest): AuthResult<Unit> {
@@ -39,6 +40,21 @@ class AuthRepositoryImpl(
             else AuthResult.UnknownError()
         } catch (e: Exception) {
             Log.d("network", e.message.toString())
+            AuthResult.UnknownError()
+        }
+    }
+
+    override suspend fun authenticate(): AuthResult<Unit> {
+        return try {
+            // Trying out authenticate directly when not signed up case:
+            val token = pref.getToken()
+            api.authenticate("Bearer ${token.token}")
+            AuthResult.Authorized()
+
+        } catch (e: HttpException){
+            if(e.code() == 401) AuthResult.UnAuthorized()
+            else AuthResult.UnknownError()
+        } catch (e: Exception) {
             AuthResult.UnknownError()
         }
     }

@@ -1,4 +1,4 @@
-package one.njk.celestidesk.data.auth.model
+package one.njk.celestidesk.network.auth.model
 
 sealed class AuthResult<T> (val data: T? = null){
     class Authorized<T>(data: T? = null): AuthResult<T>(data)

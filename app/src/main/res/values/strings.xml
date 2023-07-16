@@ -47,4 +47,7 @@
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="login">Log In\n</string>
+    <string name="button_deny">Deny</string>
+    <string name="button_approve">Approve</string>
+    <string name="approve_or_not">Do you want to approve the request ?</string>
 </resources>
