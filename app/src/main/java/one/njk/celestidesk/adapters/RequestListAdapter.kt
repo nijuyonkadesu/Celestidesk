@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import one.njk.celestidesk.data.BreakRequest
+import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.databinding.RequestItemBinding
 
 class RequestListAdapter:
