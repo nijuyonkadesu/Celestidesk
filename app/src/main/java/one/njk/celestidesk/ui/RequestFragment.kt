@@ -1,10 +1,10 @@
 package one.njk.celestidesk.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
@@ -13,9 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import one.njk.celestidesk.adapters.RequestListAdapter
-import one.njk.celestidesk.data.BreakRequest
-import one.njk.celestidesk.data.Role
-import one.njk.celestidesk.data.RolesDataStore
+import one.njk.celestidesk.database.Role
+import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.databinding.FragmentRequestBinding
 import one.njk.celestidesk.viewmodels.EmployeeViewModel
 import one.njk.celestidesk.viewmodels.ManagerViewModel
@@ -27,14 +26,6 @@ import javax.inject.Inject
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 
-val data = listOf(
-    BreakRequest("1", "1"),
-    BreakRequest("2", "2"),
-    BreakRequest("3", "3"),
-    BreakRequest("4", "4"),
-    BreakRequest("5", "5"),
-    BreakRequest("6", "6"),
-)
 
 @AndroidEntryPoint
 class RequestFragment : Fragment() {
@@ -65,7 +56,7 @@ class RequestFragment : Fragment() {
         addFilterChips(binding.filter, listOf("Accepted", "Rejected", "Processing"), lifecycleScope)
         val adapter = RequestListAdapter()
         binding.requestList.adapter = adapter
-        adapter.submitList(data)
+//        adapter.submitList(data)
         // TODO: Get from repository
     }
 

@@ -9,7 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import one.njk.celestidesk.data.RolesDataStore
+import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.database.RequestDatabase
 import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.auth.AuthRepository

@@ -1,4 +1,4 @@
-package one.njk.celestidesk.data
+package one.njk.celestidesk.database
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit

@@ -1,6 +1,6 @@
 package one.njk.celestidesk.network.auth.model
 
-import one.njk.celestidesk.data.Role
+import one.njk.celestidesk.database.Role
 
 data class AuthSignUpRequest(
     val name: String,

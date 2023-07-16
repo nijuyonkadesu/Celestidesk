@@ -1,7 +1,7 @@
 package one.njk.celestidesk.network.auth
 
 import android.util.Log
-import one.njk.celestidesk.data.RolesDataStore
+import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.network.auth.model.AuthLoginRequest
 import one.njk.celestidesk.network.auth.model.AuthResult
 import one.njk.celestidesk.network.auth.model.AuthSignUpRequest
