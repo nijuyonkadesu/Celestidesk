@@ -1,6 +1,7 @@
 package one.njk.celestidesk.network
 
 import com.squareup.moshi.Json
+import one.njk.celestidesk.database.DatabasePendingRequest
 
 data class NetworkPendingRequestContainer(
     val pendingRequests: List<NetworkPendingRequest>
@@ -17,5 +18,18 @@ data class NetworkPendingRequest(
 // TODO: Use Date type for requested date
 
 enum class BreakState {
-    APPROVED, DENIED, IN_PROCESS, IN_REVIEW
+    APPROVED, REJECTED, IN_PROCESS, IN_REVIEW
+}
+
+fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingRequest> {
+    return pendingRequests.map {
+        DatabasePendingRequest(
+            id = it.id,
+            origin = it.origin,
+            message = it.message,
+            requestDate = it.requestDate,
+            status = it.status,
+            time = it.time
+        )
+    }
 }

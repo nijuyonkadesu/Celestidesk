@@ -1,12 +1,16 @@
 package one.njk.celestidesk.di
 
+import android.content.Context
+import androidx.room.Room
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import one.njk.celestidesk.data.RolesDataStore
+import one.njk.celestidesk.database.RequestDatabase
 import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.auth.AuthRepository
 import one.njk.celestidesk.network.auth.AuthRepositoryImpl
@@ -42,4 +46,16 @@ object AppModule {
         return AuthRepositoryImpl(api, pref)
     }
 
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context)
+    = Room.databaseBuilder(
+        context = context,
+        RequestDatabase::class.java, "celestidesk"
+    ).fallbackToDestructiveMigration()
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideRequestsDao(db: RequestDatabase) = db.requestsDao
 }
