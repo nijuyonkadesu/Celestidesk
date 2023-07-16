@@ -10,6 +10,7 @@ import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.database.asDomainModel
 import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.DecisionRequest
+import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.network.asDatabaseModel
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -36,12 +37,13 @@ class RequestRepository @Inject constructor(
         }
     }
 
-    val requestsFlow = requestsDao.getPendingRequests().flowOn(Dispatchers.Default).map {
+    fun getRequestsFlow(stage: Stage) = requestsDao.getRequestsFlow(stage).flowOn(Dispatchers.Default).map {
         it.asDomainModel()
     }
 
     suspend fun makeDecision(decision: DecisionRequest) {
         try {
+            requestsDao.updateRequest(decision.reqID, decision.decision)
             val message = api.makeDecision(decision)
             Log.d("network", message.message)
             refreshPendingRequests()

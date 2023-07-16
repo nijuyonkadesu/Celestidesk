@@ -6,18 +6,24 @@ import androidx.room.Query
 import androidx.room.RoomDatabase
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
+import one.njk.celestidesk.network.Decision
+import one.njk.celestidesk.network.Stage
 
 @Dao
 interface RequestsDao {
 
-    @Query("select * from databasependingrequest")
-    fun getPendingRequests(): Flow<List<DatabasePendingRequest>>
+    @Query("select * from DatabasePendingRequest where status = :status")
+    fun getRequestsFlow(status: Stage): Flow<List<DatabasePendingRequest>>
 
     @Upsert
     fun savePendingRequests(requests: List<DatabasePendingRequest>)
+
+    // TODO: Nuke this once server is ready
+    @Query("update DatabasePendingRequest SET status = :decision WHERE _id = :requestId")
+    fun updateRequest(requestId: String, decision: Decision)
 }
 // TODO: Use orderby once date things is implemented
-@Database(entities = [DatabasePendingRequest::class], version = 1)
+@Database(entities = [DatabasePendingRequest::class], version = 1, exportSchema = false)
 abstract class RequestDatabase: RoomDatabase() {
     abstract val requestsDao: RequestsDao
 }

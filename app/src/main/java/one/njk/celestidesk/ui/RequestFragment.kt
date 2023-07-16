@@ -20,10 +20,12 @@ import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.databinding.FragmentRequestBinding
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
+import one.njk.celestidesk.network.toStage
 import one.njk.celestidesk.viewmodels.EmployeeViewModel
 import one.njk.celestidesk.viewmodels.ManagerViewModel
 import one.njk.celestidesk.viewmodels.RoleAgreement
 import one.njk.celestidesk.viewmodels.TeamLeadViewModel
+import one.njk.celestidesk.viewmodels.stages
 import javax.inject.Inject
 
 /**
@@ -66,7 +68,7 @@ class RequestFragment : Fragment() {
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name
         }
-        addFilterChips(binding.filter, listOf("Accepted", "Rejected", "Processing"), lifecycleScope)
+        addFilterChips(binding.filter, stages, lifecycleScope)
         val adapter = RequestListAdapter {
             lifecycleScope.launch {
                 if(rolesDataStore.getRole() != Role.EMPLOYEE)
@@ -122,7 +124,7 @@ class RequestFragment : Fragment() {
                 text = category
                 isCheckable = true
                 setOnClickListener {
-                    // TODO: Filter list of requests using viewmodel
+                    viewModel.updateStage(category.toStage())
                 }
             }
 
@@ -139,7 +141,8 @@ class RequestFragment : Fragment() {
             .setTitle(getString(android.R.string.dialog_alert_title))
             .setMessage(getString(R.string.approve_or_not))
             .setNegativeButton(getString(R.string.button_deny)) { _, _ ->
-                val decision = DecisionRequest(requestId, Decision.DENIED)
+                // TODO: Change it to REJECTED officially
+                val decision = DecisionRequest(requestId, Decision.REJECTED)
                  viewModel.decide(decision)
             }
             .setPositiveButton(getString(R.string.button_approve)) { _, _ ->

@@ -4,8 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import one.njk.celestidesk.network.DecisionRequest
+import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.repository.RequestRepository
 import javax.inject.Inject
 
@@ -18,7 +22,16 @@ class EmployeeViewModel @Inject constructor(val repository: RequestRepository): 
         }
     }
 
-    override val requestsFlow = repository.requestsFlow.asLiveData()
+    override val uiState = MutableStateFlow(RoleUiState(Stage.IN_PROCESS))
+    override fun updateStage(stage: Stage){
+        uiState.value = uiState.value.copy(
+            stage = stage
+        )
+    }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val requestsFlow = uiState.flatMapLatest {
+        repository.getRequestsFlow(it.stage)
+    }.asLiveData()
     override fun decide(decision: DecisionRequest) {
         // Can't lol can't.
     }

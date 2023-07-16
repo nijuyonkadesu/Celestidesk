@@ -14,14 +14,23 @@ data class NetworkPendingRequest(
     val subject: String,
     val message: String,
     @Json(name = "requestdate") val requestDate: String,
-    val status: BreakState,
+    val status: Stage,
     val time: String,
     @Json(name = "__v") val v: Int
 )
 // TODO: Use Date type for requested date
 
-enum class BreakState {
+enum class Stage {
     APPROVED, REJECTED, IN_PROCESS, IN_REVIEW
+}
+fun String.toStage(): Stage {
+    val statusMap = mapOf(
+        "Approved" to Stage.APPROVED,
+        "Rejected" to Stage.REJECTED,
+        "Processing" to Stage.IN_PROCESS,
+        "Reviewing" to Stage.IN_REVIEW
+    )
+    return statusMap[this] ?: statusMap["Approved"]!!
 }
 
 fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingRequest> {
@@ -51,8 +60,9 @@ fun NetworkPendingRequestContainer.asDomainModel(): List<BreakRequest> {
 }
 
 enum class Decision {
-    APPROVED, DENIED
+    APPROVED, REJECTED
 }
+// TODO: ASK NIYAS TO OFFICIALLY CHANGE IT TO REJECTED
 
 data class Message(
     val message: String
