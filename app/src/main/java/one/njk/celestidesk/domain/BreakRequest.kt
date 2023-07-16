@@ -10,4 +10,3 @@ data class BreakRequest(
     val status: BreakState
 )
 // TODO: Use Date type for requested date
-// TODO: Network, db, UI should have separate BreakRequest dataclass

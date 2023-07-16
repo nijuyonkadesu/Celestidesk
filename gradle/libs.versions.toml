@@ -47,7 +47,7 @@ retrofit-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.re
 moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 
 # ROOM
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 # default dependancies / androidx

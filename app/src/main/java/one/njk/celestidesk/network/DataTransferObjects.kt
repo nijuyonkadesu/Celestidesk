@@ -5,7 +5,7 @@ import one.njk.celestidesk.database.DatabasePendingRequest
 import one.njk.celestidesk.domain.BreakRequest
 
 data class NetworkPendingRequestContainer(
-    val pendingRequests: List<NetworkPendingRequest>
+    val requests: List<NetworkPendingRequest>
 )
 
 data class NetworkPendingRequest(
@@ -13,9 +13,10 @@ data class NetworkPendingRequest(
     val origin: String,
     val subject: String,
     val message: String,
-    val requestDate: String,
+    @Json(name = "requestdate") val requestDate: String,
     val status: BreakState,
     val time: String,
+    @Json(name = "__v") val v: Int
 )
 // TODO: Use Date type for requested date
 
@@ -24,7 +25,7 @@ enum class BreakState {
 }
 
 fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingRequest> {
-    return pendingRequests.map {
+    return requests.map {
         DatabasePendingRequest(
             id = it.id,
             origin = it.origin,
@@ -38,7 +39,7 @@ fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingReques
 }
 
 fun NetworkPendingRequestContainer.asDomainModel(): List<BreakRequest> {
-    return pendingRequests.map {
+    return requests.map {
         BreakRequest(
             id = it.id,
             subject = it.subject,

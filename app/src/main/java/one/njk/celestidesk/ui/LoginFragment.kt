@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import one.njk.celestidesk.network.auth.model.AuthResult
 import one.njk.celestidesk.databinding.FragmentLoginBinding
@@ -76,7 +77,9 @@ class LoginFragment: Fragment() {
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
 //                    viewModel.logIn("radextrem", "123456")
+                    delay(7000)
                     viewModel.authenticate()
+                    // Wait for network inspector to launch
                 }
             }
         }

@@ -24,7 +24,7 @@ class RequestListAdapter:
     }
     companion object DiffCallback : DiffUtil.ItemCallback<BreakRequest>() {
         override fun areItemsTheSame(oldItem: BreakRequest, newItem: BreakRequest): Boolean {
-            return oldItem == newItem
+            return oldItem.id == newItem.id
         }
         override fun areContentsTheSame(oldItem: BreakRequest, newItem: BreakRequest): Boolean {
             return oldItem.message == newItem.message

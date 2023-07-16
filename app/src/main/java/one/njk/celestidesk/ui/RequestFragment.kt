@@ -33,10 +33,19 @@ class RequestFragment : Fragment() {
     private var _binding: FragmentRequestBinding? = null
     @Inject
     lateinit var rolesDataStore: RolesDataStore
+    lateinit var viewModel: RoleAgreement
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            viewModel = chooseLogic()
+            viewModel.refreshRequests()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,13 +60,16 @@ class RequestFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
-            _binding!!.role.text = chooseLogic().name
+            _binding!!.role.text = viewModel.name
         }
         addFilterChips(binding.filter, listOf("Accepted", "Rejected", "Processing"), lifecycleScope)
         val adapter = RequestListAdapter()
         binding.requestList.adapter = adapter
-//        adapter.submitList(data)
-        // TODO: Get from repository
+
+        viewModel.requestsFlow.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
     }
 
     override fun onDestroyView() {

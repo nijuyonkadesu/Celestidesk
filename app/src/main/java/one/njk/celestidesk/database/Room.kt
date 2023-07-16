@@ -16,7 +16,7 @@ interface RequestsDao {
     @Upsert
     fun savePendingRequests(requests: List<DatabasePendingRequest>)
 }
-
+// TODO: Use orderby once date things is implemented
 @Database(entities = [DatabasePendingRequest::class], version = 1)
 abstract class RequestDatabase: RoomDatabase() {
     abstract val requestsDao: RequestsDao

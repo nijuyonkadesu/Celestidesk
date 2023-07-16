@@ -30,5 +30,7 @@ interface ApiService {
 
     // Other Endpoints
     @GET("api/request/pending")
-    suspend fun getPendingRequests(): NetworkPendingRequestContainer
+    suspend fun getPendingRequests(
+        @Header("Authorization") token: String
+    ): NetworkPendingRequestContainer
 }
