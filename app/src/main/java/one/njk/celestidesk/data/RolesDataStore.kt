@@ -27,7 +27,7 @@ class RolesDataStore(private val context: Context) {
 
     suspend fun getRole(): Role {
         val role = context.rolesDataStore.data.first()[ROLE]
-        return role?.let { Role.valueOf(it) } ?: Role.EMPLOYEE
+        return role?.let { Role.valueOf(it) } ?: Role.MANAGER
     }
 
     suspend fun getToken(): TokenResponse {
