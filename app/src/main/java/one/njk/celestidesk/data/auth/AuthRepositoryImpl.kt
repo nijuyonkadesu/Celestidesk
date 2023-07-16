@@ -42,4 +42,19 @@ class AuthRepositoryImpl(
             AuthResult.UnknownError()
         }
     }
+
+    override suspend fun authenticate(): AuthResult<Unit> {
+        return try {
+            // Trying out authenticate directly when not signed up case:
+            val token = pref.getToken()
+            api.authenticate("Bearer ${token.token}")
+            AuthResult.Authorized()
+
+        } catch (e: HttpException){
+            if(e.code() == 401) AuthResult.UnAuthorized()
+            else AuthResult.UnknownError()
+        } catch (e: Exception) {
+            AuthResult.UnknownError()
+        }
+    }
 }

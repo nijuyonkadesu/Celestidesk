@@ -39,6 +39,16 @@ class AuthViewModel @Inject constructor(
             it.copy(isLoading = false, authResult = result)
         }
     }
+
+    suspend fun authenticate(){
+        uiState.update {
+            it.copy(isLoading = true)
+        }
+        val result = api.authenticate()
+        uiState.update {
+            it.copy(isLoading = false, authResult = result)
+        }
+    }
 }
 
 data class UiState(

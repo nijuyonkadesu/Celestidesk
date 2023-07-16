@@ -77,7 +77,8 @@ class LoginFragment: Fragment() {
 
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.logIn("radextrem", "123456")
+//                    viewModel.logIn("radextrem", "123456")
+                    viewModel.authenticate()
                 }
             }
         }

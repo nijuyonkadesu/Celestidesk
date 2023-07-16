@@ -15,7 +15,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
-const val BASE_URL = "https://celestidesk.onrender.com/api/employee/"
+const val BASE_URL = "https://celestidesk.onrender.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
