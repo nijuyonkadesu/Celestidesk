@@ -33,4 +33,9 @@ interface ApiService {
     suspend fun getPendingRequests(
         @Header("Authorization") token: String
     ): NetworkPendingRequestContainer
+
+    @POST("api/transaction/decide")
+    suspend fun makeDecision(
+        @Body decisionRequest: DecisionRequest
+    ): Message
 }

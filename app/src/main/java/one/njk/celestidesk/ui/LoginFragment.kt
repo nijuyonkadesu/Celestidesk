@@ -77,7 +77,7 @@ class LoginFragment: Fragment() {
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
 //                    viewModel.logIn("radextrem", "123456")
-                    delay(7000)
+//                    delay(7000)
                     viewModel.authenticate()
                     // Wait for network inspector to launch
                 }

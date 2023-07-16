@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.databinding.RequestItemBinding
 
-class RequestListAdapter:
-    ListAdapter<BreakRequest, RequestListAdapter.ItemViewHolder>(DiffCallback) {
+class RequestListAdapter(
+    private val exposeRequest: (String) -> Unit,
+): ListAdapter<BreakRequest, RequestListAdapter.ItemViewHolder>(DiffCallback) {
 
     class ItemViewHolder(private val binding: RequestItemBinding):
         RecyclerView.ViewHolder(binding.root) {
@@ -18,7 +19,7 @@ class RequestListAdapter:
             binding.apply {
                 reasonSubject.text = req.subject
                 reason.text = req.message
-                time.text = req.date
+                time.text = req.dateShort
             }
         }
     }
@@ -38,6 +39,7 @@ class RequestListAdapter:
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
+        holder.itemView.setOnClickListener { exposeRequest(item.id) }
         holder.bind(item)
     }
 }

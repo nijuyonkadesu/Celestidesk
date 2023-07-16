@@ -24,7 +24,7 @@ fun List<DatabasePendingRequest>.asDomainModel(): List<BreakRequest> {
             id = it.id,
             subject = it.subject,
             message = it.message,
-            date = it.requestDate,
+            date = it.time,
             status = it.status
         )
     }

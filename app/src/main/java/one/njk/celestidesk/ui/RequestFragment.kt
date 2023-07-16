@@ -9,13 +9,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import one.njk.celestidesk.R
 import one.njk.celestidesk.adapters.RequestListAdapter
 import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.databinding.FragmentRequestBinding
+import one.njk.celestidesk.network.Decision
+import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.viewmodels.EmployeeViewModel
 import one.njk.celestidesk.viewmodels.ManagerViewModel
 import one.njk.celestidesk.viewmodels.RoleAgreement
@@ -63,7 +67,12 @@ class RequestFragment : Fragment() {
             _binding!!.role.text = viewModel.name
         }
         addFilterChips(binding.filter, listOf("Accepted", "Rejected", "Processing"), lifecycleScope)
-        val adapter = RequestListAdapter()
+        val adapter = RequestListAdapter {
+            lifecycleScope.launch {
+                if(rolesDataStore.getRole() != Role.EMPLOYEE)
+                    showConfirmationDialog(it)
+            }
+        }
         binding.requestList.adapter = adapter
 
         viewModel.requestsFlow.observe(viewLifecycleOwner) {
@@ -123,5 +132,20 @@ class RequestFragment : Fragment() {
                 chipGroup.getChildAt(0).performClick()
             }
         }
+    }
+
+    private fun showConfirmationDialog(requestId: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(android.R.string.dialog_alert_title))
+            .setMessage(getString(R.string.approve_or_not))
+            .setNegativeButton(getString(R.string.button_deny)) { _, _ ->
+                val decision = DecisionRequest(requestId, Decision.DENIED)
+                 viewModel.decide(decision)
+            }
+            .setPositiveButton(getString(R.string.button_approve)) { _, _ ->
+                val decision = DecisionRequest(requestId, Decision.APPROVED)
+                viewModel.decide(decision)
+            }
+            .show()
     }
 }
