@@ -9,7 +9,7 @@ import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.databinding.RequestItemBinding
 
 class RequestListAdapter(
-    private val exposeRequest: (String) -> Unit,
+    private val exposeRequest: (BreakRequest) -> Unit,
 ): ListAdapter<BreakRequest, RequestListAdapter.ItemViewHolder>(DiffCallback) {
 
     class ItemViewHolder(private val binding: RequestItemBinding):
@@ -39,7 +39,7 @@ class RequestListAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = getItem(position)
-        holder.itemView.setOnClickListener { exposeRequest(item.id) }
+        holder.itemView.setOnClickListener { exposeRequest(item) }
         holder.bind(item)
     }
 }

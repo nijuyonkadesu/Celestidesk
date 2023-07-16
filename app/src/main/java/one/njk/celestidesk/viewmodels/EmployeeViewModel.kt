@@ -8,6 +8,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.repository.RequestRepository
@@ -32,7 +33,7 @@ class EmployeeViewModel @Inject constructor(val repository: RequestRepository): 
     override val requestsFlow = uiState.flatMapLatest {
         repository.getRequestsFlow(it.stage)
     }.asLiveData()
-    override fun decide(decision: DecisionRequest) {
+    override fun decide(decision: DecisionRequest, breakRequest: BreakRequest) {
         // Can't lol can't.
     }
 }

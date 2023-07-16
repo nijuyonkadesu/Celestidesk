@@ -12,12 +12,23 @@ android {
     namespace 'one.njk.celestidesk'
     compileSdk 33
 
+    // Load properties file containing our API key
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def mailId = properties.getProperty('mail_id')
+    def mailPwd = properties.getProperty('mail_pwd')
+    def mailTo = properties.getProperty('mail_to')
+
     defaultConfig {
         applicationId "one.njk.celestidesk"
         minSdk 30
         targetSdk 33
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String" , "MAIL_ID" ,  mailId
+        buildConfigField "String" , "MAIL_PWD" ,  mailPwd
+        buildConfigField "String" , "MAIL_TO" ,  mailTo
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,6 +49,7 @@ android {
     buildFeatures {
         viewBinding true
         dataBinding true
+        buildConfig true
     }
 }
 
@@ -64,4 +76,7 @@ dependencies {
     // ROOM
     implementation libs.room.ktx
     kapt libs.room.compiler
+
+    // Mail
+    implementation libs.bundles.mail
 }

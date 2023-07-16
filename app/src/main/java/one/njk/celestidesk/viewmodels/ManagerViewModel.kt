@@ -9,6 +9,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.Stage
@@ -35,16 +36,19 @@ class ManagerViewModel @Inject constructor(val repository: RequestRepository): V
         repository.getRequestsFlow(it.stage)
     }.asLiveData()
 
-    override fun decide(decision: DecisionRequest) {
+    override fun decide(decision: DecisionRequest, breakRequest: BreakRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.makeDecision(decision)
             if(decision.decision == Decision.APPROVED) {
-                fireMail()
+                fireMail(decision, breakRequest)
             }
         }
     }
 
-    private fun fireMail() {
+    private fun fireMail(decision: DecisionRequest, breakRequest: BreakRequest) {
         // TODO: Send mail
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.sendMailFromRequest(breakRequest.subject, breakRequest.message, decision.decision)
+        }
     }
 }

@@ -9,9 +9,11 @@ import one.njk.celestidesk.database.RequestsDao
 import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.database.asDomainModel
 import one.njk.celestidesk.network.ApiService
+import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.network.asDatabaseModel
+import one.njk.celestidesk.utils.sendEmail
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -55,4 +57,9 @@ class RequestRepository @Inject constructor(
             Log.d("network", "fatal: ${e.message}")
         }
     }
+
+    suspend fun sendMailFromRequest(subject: String, body: String, decision: Decision) {
+        sendEmail(subject, "Your request `$body` got $decision by MANAGER")
+    }
+    // TODO: Make it more dynamic and sensible
 }

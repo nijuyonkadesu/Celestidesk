@@ -12,7 +12,7 @@ interface RoleAgreement {
     val uiState: MutableStateFlow<RoleUiState>
     fun updateStage(stage: Stage)
     fun refreshRequests()
-    fun decide(decision: DecisionRequest)
+    fun decide(decision: DecisionRequest, breakRequest: BreakRequest)
 }
 
 val stages = listOf("Processing", "Reviewing", "Accepted", "Rejected")

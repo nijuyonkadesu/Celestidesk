@@ -18,6 +18,7 @@ import one.njk.celestidesk.adapters.RequestListAdapter
 import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.databinding.FragmentRequestBinding
+import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.toStage
@@ -136,18 +137,18 @@ class RequestFragment : Fragment() {
         }
     }
 
-    private fun showConfirmationDialog(requestId: String) {
+    private fun showConfirmationDialog(breakRequest: BreakRequest) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(android.R.string.dialog_alert_title))
             .setMessage(getString(R.string.approve_or_not))
             .setNegativeButton(getString(R.string.button_deny)) { _, _ ->
                 // TODO: Change it to REJECTED officially
-                val decision = DecisionRequest(requestId, Decision.REJECTED)
-                 viewModel.decide(decision)
+                val decision = DecisionRequest(breakRequest.id, Decision.REJECTED)
+                 viewModel.decide(decision, breakRequest)
             }
             .setPositiveButton(getString(R.string.button_approve)) { _, _ ->
-                val decision = DecisionRequest(requestId, Decision.APPROVED)
-                viewModel.decide(decision)
+                val decision = DecisionRequest(breakRequest.id, Decision.APPROVED)
+                viewModel.decide(decision, breakRequest)
             }
             .show()
     }
