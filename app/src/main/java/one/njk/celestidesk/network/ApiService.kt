@@ -29,6 +29,7 @@ interface ApiService {
     // Auth Endpoints ends --------------------------
 
     // Other Endpoints
+    // Pending for Everyone
     @GET("api/request/pending")
     suspend fun getPendingRequests(
         @Header("Authorization") token: String
@@ -38,4 +39,8 @@ interface ApiService {
     suspend fun makeDecision(
         @Body decisionRequest: DecisionRequest
     ): Message
+
+    // History for TeamLead and Manager to see past Transactions
+    @GET("api/transaction/history")
+    suspend fun getPastTransactions(): Transactions
 }

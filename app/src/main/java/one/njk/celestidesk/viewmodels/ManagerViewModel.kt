@@ -46,7 +46,7 @@ class ManagerViewModel @Inject constructor(val repository: RequestRepository): V
     }
 
     private fun fireMail(decision: DecisionRequest, breakRequest: BreakRequest) {
-        // TODO: Send mail
+        // TODO: Send SMS instead, it's fine if it's paid
         viewModelScope.launch(Dispatchers.IO) {
             repository.sendMailFromRequest(breakRequest.subject, breakRequest.message, decision.decision)
         }

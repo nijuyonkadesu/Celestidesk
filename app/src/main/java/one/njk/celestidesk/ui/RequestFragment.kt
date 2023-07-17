@@ -142,7 +142,6 @@ class RequestFragment : Fragment() {
             .setTitle(getString(android.R.string.dialog_alert_title))
             .setMessage(getString(R.string.approve_or_not))
             .setNegativeButton(getString(R.string.button_deny)) { _, _ ->
-                // TODO: Change it to REJECTED officially
                 val decision = DecisionRequest(breakRequest.id, Decision.REJECTED)
                  viewModel.decide(decision, breakRequest)
             }
@@ -153,3 +152,6 @@ class RequestFragment : Fragment() {
             .show()
     }
 }
+// TODO: Profile Pic for users
+// TODO: >5 Request, it goes to Manager directly
+// TODO: 20min expiry after reaching manager

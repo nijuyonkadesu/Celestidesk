@@ -45,6 +45,7 @@ class RequestRepository @Inject constructor(
 
     suspend fun makeDecision(decision: DecisionRequest) {
         try {
+            // TODO: Nuke it when New Request layout is done
             requestsDao.updateRequest(decision.reqID, decision.decision)
             val message = api.makeDecision(decision)
             Log.d("network", message.message)
@@ -58,7 +59,7 @@ class RequestRepository @Inject constructor(
         }
     }
 
-    suspend fun sendMailFromRequest(subject: String, body: String, decision: Decision) {
+    fun sendMailFromRequest(subject: String, body: String, decision: Decision) {
         sendEmail(subject, "Your request `$body` got $decision by MANAGER")
     }
     // TODO: Make it more dynamic and sensible

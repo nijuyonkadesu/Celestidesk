@@ -2,6 +2,7 @@ package one.njk.celestidesk.network
 
 import com.squareup.moshi.Json
 import one.njk.celestidesk.database.DatabasePendingRequest
+import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.domain.BreakRequest
 
 data class NetworkPendingRequestContainer(
@@ -62,7 +63,6 @@ fun NetworkPendingRequestContainer.asDomainModel(): List<BreakRequest> {
 enum class Decision {
     APPROVED, REJECTED
 }
-// TODO: ASK NIYAS TO OFFICIALLY CHANGE IT TO REJECTED
 
 data class Message(
     val message: String
@@ -72,3 +72,33 @@ data class DecisionRequest(
     val reqID: String,
     val decision: Decision
 )
+
+// Transaction Classes
+data class Transactions (
+    val history: List<History>
+)
+
+data class History (
+    val id: String,
+    val origin: Origin,
+    val responder: String,
+    val request: HistoryStatus,
+    val result: String,
+    val time: String,
+    val v: Long
+)
+
+data class Origin (
+    val id: String,
+    val name: String,
+    val username: String,
+    @Json(name = "orghandle") val orgHandle: String,
+    val type: Role,
+    val v: Long
+)
+
+enum class HistoryStatus {
+    ACCEPTED, REJECTED, EXPIRED
+}
+
+// TODO: Add database, domain models, mappers and a fragment with a view to show transaction (only Manager & Teamlead)
