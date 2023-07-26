@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import one.njk.celestidesk.domain.BreakRequest
-import one.njk.celestidesk.network.BreakState
+import one.njk.celestidesk.network.Stage
 
 @Entity
 data class DatabasePendingRequest(
@@ -14,7 +14,7 @@ data class DatabasePendingRequest(
     val subject: String,
     val message: String,
     @ColumnInfo(name = "request_date") val requestDate: String,
-    val status: BreakState,
+    val status: Stage,
     val time: String,
 )
 

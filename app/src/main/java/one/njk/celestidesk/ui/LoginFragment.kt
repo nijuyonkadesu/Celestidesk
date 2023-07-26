@@ -16,10 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import one.njk.celestidesk.network.auth.model.AuthResult
 import one.njk.celestidesk.databinding.FragmentLoginBinding
+import one.njk.celestidesk.network.auth.model.AuthResult
 import one.njk.celestidesk.viewmodels.AuthViewModel
 
 @AndroidEntryPoint
@@ -99,3 +98,5 @@ class LoginFragment: Fragment() {
         return false
     }
 }
+// TODO: A new SignUp page
+// TODO: Save role during SignUp or it's better if we know role on login (along with token) in TokenResponse

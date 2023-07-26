@@ -18,12 +18,15 @@ import one.njk.celestidesk.adapters.RequestListAdapter
 import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.databinding.FragmentRequestBinding
+import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
+import one.njk.celestidesk.network.toStage
 import one.njk.celestidesk.viewmodels.EmployeeViewModel
 import one.njk.celestidesk.viewmodels.ManagerViewModel
 import one.njk.celestidesk.viewmodels.RoleAgreement
 import one.njk.celestidesk.viewmodels.TeamLeadViewModel
+import one.njk.celestidesk.viewmodels.stages
 import javax.inject.Inject
 
 /**
@@ -66,7 +69,7 @@ class RequestFragment : Fragment() {
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name
         }
-        addFilterChips(binding.filter, listOf("Accepted", "Rejected", "Processing"), lifecycleScope)
+        addFilterChips(binding.filter, stages, lifecycleScope)
         val adapter = RequestListAdapter {
             lifecycleScope.launch {
                 if(rolesDataStore.getRole() != Role.EMPLOYEE)
@@ -122,7 +125,7 @@ class RequestFragment : Fragment() {
                 text = category
                 isCheckable = true
                 setOnClickListener {
-                    // TODO: Filter list of requests using viewmodel
+                    viewModel.updateStage(category.toStage())
                 }
             }
 
@@ -134,18 +137,21 @@ class RequestFragment : Fragment() {
         }
     }
 
-    private fun showConfirmationDialog(requestId: String) {
+    private fun showConfirmationDialog(breakRequest: BreakRequest) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(android.R.string.dialog_alert_title))
             .setMessage(getString(R.string.approve_or_not))
             .setNegativeButton(getString(R.string.button_deny)) { _, _ ->
-                val decision = DecisionRequest(requestId, Decision.DENIED)
-                 viewModel.decide(decision)
+                val decision = DecisionRequest(breakRequest.id, Decision.REJECTED)
+                 viewModel.decide(decision, breakRequest)
             }
             .setPositiveButton(getString(R.string.button_approve)) { _, _ ->
-                val decision = DecisionRequest(requestId, Decision.APPROVED)
-                viewModel.decide(decision)
+                val decision = DecisionRequest(breakRequest.id, Decision.APPROVED)
+                viewModel.decide(decision, breakRequest)
             }
             .show()
     }
 }
+// TODO: Profile Pic for users
+// TODO: >5 Request, it goes to Manager directly
+// TODO: 20min expiry after reaching manager

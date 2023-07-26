@@ -20,12 +20,14 @@ moshi = "1.14.0"
 lifecycle = "2.6.1"
 datastore = "1.0.0"
 room = "2.5.2"
+mail = "1.6.2"
 
 [bundles]
 nav = ["nav-fragment", "nav-ui"]
 testing = ["androidx-test-ext", "androidx-test-espresso"]
 androidx = ["androidx-appcompat", "androidx-core", "androidx-constraintlayout", "androidx-recycler-view", "lifecycle-livedata", "lifecycle-viewmodel", "lifecycle-runtime", "datastore"]
 retrofit = ["retrofit-moshi", "moshi"]
+mail = ["android-mail", "android-mail-activation"]
 
 [libraries]
 # Navigation Graph
@@ -49,6 +51,10 @@ moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 # ROOM
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+# Mail Client
+android-mail = { module = "com.sun.mail:android-mail", version.ref = "mail" }
+android-mail-activation = { module = "com.sun.mail:android-activation", version.ref = "mail" }
 
 # default dependancies / androidx
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
