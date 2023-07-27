@@ -46,8 +46,13 @@
     <string name="request_fragment_label">Celestidesk</string>
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
-    <string name="login">Log In\n</string>
+    <string name="login">Log In</string>
     <string name="button_deny">Deny</string>
     <string name="button_approve">Approve</string>
     <string name="approve_or_not">Do you want to approve the request ?</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_email">Institution mail</string>
+    <string name="hint_room">Room No</string>
+    <string name="hint_parent_number">Parent Number</string>
+    <string name="signup">Sign Up</string>
 </resources>

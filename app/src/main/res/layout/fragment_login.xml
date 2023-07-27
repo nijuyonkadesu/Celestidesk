@@ -23,7 +23,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
+
             android:inputType="textPersonName"
+            android:importantForAutofill="yes"
+            android:autofillHints="username"
             tools:text="nijuyonkadesu" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -35,6 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="@string/hint_password"
+
+        android:autofillHints="password"
         app:endIconMode="password_toggle"
         app:layout_constraintTop_toBottomOf="@id/username"
         app:layout_constraintLeft_toLeftOf="@id/username">

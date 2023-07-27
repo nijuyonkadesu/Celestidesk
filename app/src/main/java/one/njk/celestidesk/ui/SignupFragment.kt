@@ -11,19 +11,20 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import one.njk.celestidesk.databinding.FragmentLoginBinding
+import one.njk.celestidesk.database.Role
+import one.njk.celestidesk.databinding.FragmentSignupBinding
 import one.njk.celestidesk.network.auth.model.AuthResult
+import one.njk.celestidesk.network.auth.model.AuthSignUpRequest
 import one.njk.celestidesk.viewmodels.AuthViewModel
 
 @AndroidEntryPoint
-class LoginFragment: Fragment() {
-    lateinit var binding: FragmentLoginBinding
+class SignupFragment: Fragment() {
+
+    lateinit var binding: FragmentSignupBinding
     val viewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
@@ -31,7 +32,7 @@ class LoginFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        binding = FragmentSignupBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,48 +40,52 @@ class LoginFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            submit.setOnClickListener {
+            signupBtn.setOnClickListener {
                 lifecycleScope.launch {
-                    val inputUsername = username.editText?.text.toString()
-                    val inputPassword = password.editText?.text.toString()
-                    if(inputPassword.isNotEmpty() && inputUsername.isNotEmpty()){
-                        viewModel.logIn(inputUsername, inputPassword)
-                        // TODO: Do validation inside viewmodel
-                    }
+                    val inputName = name.editText?.text.toString()
+                    val inputMail = email.editText?.text.toString()
+                    val inputUsername = usernameSignup.editText?.text.toString()
+                    val inputPassword = passwordSignup.editText?.text.toString()
+                    val inputRoomNo = roomNo.editText?.text.toString()
+                    val inputParentNumber = parentNumber.editText?.text.toString()
+
+                    val raw = AuthSignUpRequest(
+                        inputName,
+                        inputUsername,
+                        "svcecollege",
+                        Role.EMPLOYEE,
+                        inputPassword
+                    )
+
+                    if(!viewModel.validateAndSignUp(raw))
+                        Toast.makeText(context, "verify entered details!", Toast.LENGTH_SHORT).show()
                 }
             }
-            viewModel.state.observe(viewLifecycleOwner){
-                if(it.isLoading) {
+
+            viewModel.state.observe(viewLifecycleOwner) {
+                if(it.isLoading){
+                    signupBtn.visibility = View.GONE
                     loading.visibility = View.VISIBLE
-                    submit.visibility = View.GONE
                 } else {
-                    loading.visibility = View.INVISIBLE
-                    submit.visibility = View.VISIBLE
+                    loading.visibility = View.GONE
+                    signupBtn.visibility = View.VISIBLE
                 }
-                if(it.authResult is AuthResult.Authorized) {
+
+                if(it.authResult is AuthResult.Authorized){
                     findNavController().navigate(
-                        LoginFragmentDirections.actionLoginFragmentToRequestFragment())
+                        SignupFragmentDirections.actionSignupFragmentToRequestFragment())
                 } else {
-                    Toast.makeText(context, "verify your username / password", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Are you from our institution lol? check entered details", Toast.LENGTH_SHORT).show()
                 }
-                // TODO: wrap this inside a fun that takes a block { }
             }
-            submit.setOnEditorActionListener { view, event, _ ->
+
+            signupBtn.setOnEditorActionListener { view, event, _ ->
                 if(event == EditorInfo.IME_ACTION_NEXT){
                     view.requestFocus()
                     true
                 } else {
                     handleKeyEvent(view, event)
                     true
-                }
-            }
-
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                    viewModel.logIn("radextrem", "123456")
-//                    delay(7000)
-                    viewModel.authenticate()
-                    // Wait for network inspector to launch
                 }
             }
         }
@@ -100,4 +105,3 @@ class LoginFragment: Fragment() {
         return false
     }
 }
-// TODO: Save role during SignUp or it's better if we know role on login (along with token) in TokenResponse

@@ -1,5 +1,7 @@
 package one.njk.celestidesk.viewmodels
 
+import android.util.Log
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import one.njk.celestidesk.network.auth.AuthRepository
 import one.njk.celestidesk.network.auth.model.AuthLoginRequest
 import one.njk.celestidesk.network.auth.model.AuthResult
+import one.njk.celestidesk.network.auth.model.AuthSignUpRequest
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +31,17 @@ class AuthViewModel @Inject constructor(
         flowOf(uiState).flowOn(Dispatchers.Default)
     }.asLiveData()
 
+    private suspend fun signUp(req: AuthSignUpRequest) {
+
+        uiState.update {
+            it.copy(isLoading = true)
+        }
+        val result = api.signUp(req)
+        uiState.update {
+            it.copy(isLoading = false, authResult = result)
+        }
+    }
+
     suspend fun logIn(username: String, password: String){
         uiState.update {
             it.copy(isLoading = true)
@@ -39,6 +53,7 @@ class AuthViewModel @Inject constructor(
             it.copy(isLoading = false, authResult = result)
         }
     }
+    // TODO: Validators for LogIn too & check if coroutines are used properly here
 
     suspend fun authenticate(){
         uiState.update {
@@ -48,6 +63,31 @@ class AuthViewModel @Inject constructor(
         uiState.update {
             it.copy(isLoading = false, authResult = result)
         }
+    }
+
+    suspend fun validateAndSignUp(raw: AuthSignUpRequest): Boolean {
+
+        val req = AuthSignUpRequest(
+            name = raw.name.trim(),
+            username = raw.username.trim(),
+            orgHandle = raw.orgHandle,
+            type = raw.type,
+            password = raw.password
+        )
+
+        Log.d("sign up", "status: Checking")
+
+        val passwordRegex = "^(?=.*\\d)(?=.*[A-Z]).{8,}$".toRegex()
+
+        if (passwordRegex.matches(req.password)
+                && Patterns.EMAIL_ADDRESS.matcher("200ok09@svce.ac.in").matches()
+                && req.name.isNotEmpty()
+                && req.username.isNotEmpty()) {
+            signUp(req)
+            return true
+        }
+        return false
+        // TODO: Add ROOM no, parent Number
     }
 }
 
