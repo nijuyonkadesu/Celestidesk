@@ -45,6 +45,7 @@ class LoginFragment: Fragment() {
                     val inputPassword = password.editText?.text.toString()
                     if(inputPassword.isNotEmpty() && inputUsername.isNotEmpty()){
                         viewModel.logIn(inputUsername, inputPassword)
+                        // TODO: Do validation inside viewmodel
                     }
                 }
             }
@@ -62,6 +63,7 @@ class LoginFragment: Fragment() {
                 } else {
                     Toast.makeText(context, "verify your username / password", Toast.LENGTH_SHORT).show()
                 }
+                // TODO: wrap this inside a fun that takes a block { }
             }
             submit.setOnEditorActionListener { view, event, _ ->
                 if(event == EditorInfo.IME_ACTION_NEXT){
@@ -98,5 +100,4 @@ class LoginFragment: Fragment() {
         return false
     }
 }
-// TODO: A new SignUp page
 // TODO: Save role during SignUp or it's better if we know role on login (along with token) in TokenResponse

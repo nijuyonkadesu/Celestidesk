@@ -9,3 +9,13 @@ data class AuthSignUpRequest(
     val type: Role,
     val password: String,
 )
+
+// TODO: add below fields - but ignore while sending actual request
+// TODO: [imp] Discuss about: **New SignUp requests need approval from 'ADMIN', once he has approved, he can LogIn **
+/**
+    --------
+    - EMAIL
+    - ROOM ID
+    - Parent Number
+    --------
+ */

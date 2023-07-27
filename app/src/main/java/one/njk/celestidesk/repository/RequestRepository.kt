@@ -62,5 +62,5 @@ class RequestRepository @Inject constructor(
     fun sendMailFromRequest(subject: String, body: String, decision: Decision) {
         sendEmail(subject, "Your request `$body` got $decision by MANAGER")
     }
-    // TODO: Make it more dynamic and sensible
+    // TODO: Make it more dynamic and sensible - Replace with SMS
 }

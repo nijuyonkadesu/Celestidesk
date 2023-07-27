@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         val navController = navHostFragment.navController
         // Top level Navigation destination do not have <- icon
-        appBarConfiguration = AppBarConfiguration(setOf(R.id.loginFragment, R.id.requestFragment))
+        appBarConfiguration = AppBarConfiguration(setOf(R.id.loginFragment, R.id.signupFragment, R.id.requestFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         binding.fab.setOnClickListener { view ->
