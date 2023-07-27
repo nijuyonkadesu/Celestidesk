@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import one.njk.celestidesk.BuildConfig
 import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.database.RequestDatabase
 import one.njk.celestidesk.database.RequestsDao
@@ -21,7 +22,6 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
-const val BASE_URL = "https://celestidesk.onrender.com/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -36,7 +36,7 @@ object AppModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create()

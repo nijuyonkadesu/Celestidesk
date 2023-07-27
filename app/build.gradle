@@ -18,6 +18,7 @@ android {
     def mailId = properties.getProperty('mail_id')
     def mailPwd = properties.getProperty('mail_pwd')
     def mailTo = properties.getProperty('mail_to')
+    def baseUrl = properties.getProperty('base_url')
 
     defaultConfig {
         applicationId "one.njk.celestidesk"
@@ -29,6 +30,7 @@ android {
         buildConfigField "String" , "MAIL_ID" ,  mailId
         buildConfigField "String" , "MAIL_PWD" ,  mailPwd
         buildConfigField "String" , "MAIL_TO" ,  mailTo
+        buildConfigField "String" , "BASE_URL" , baseUrl
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
