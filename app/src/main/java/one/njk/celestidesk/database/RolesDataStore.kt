@@ -19,7 +19,7 @@ class RolesDataStore(private val context: Context) {
         private val TOKEN = stringPreferencesKey("TOKEN")
     }
 
-    suspend fun setRole(role: Role) {
+    private suspend fun setRole(role: Role) {
         context.rolesDataStore.edit {
             it[ROLE] = role.toString()
         }
@@ -27,17 +27,20 @@ class RolesDataStore(private val context: Context) {
 
     suspend fun getRole(): Role {
         val role = context.rolesDataStore.data.first()[ROLE]
-        return role?.let { Role.valueOf(it) } ?: Role.MANAGER
+        return role?.let { Role.valueOf(it) } ?: Role.EMPLOYEE
     }
 
     suspend fun getToken(): TokenResponse {
+        val role = context.rolesDataStore.data.first()[ROLE] ?: Role.EMPLOYEE.toString()
         return TokenResponse(
             "local copy",
-            context.rolesDataStore.data.first()[TOKEN] ?: ""
+            context.rolesDataStore.data.first()[TOKEN] ?: "",
+            Role.valueOf(role)
         )
     }
 
     suspend fun setToken(tokenResponse: TokenResponse) {
+        setRole(tokenResponse.role)
         context.rolesDataStore.edit {
             it[TOKEN] = tokenResponse.token
         }
