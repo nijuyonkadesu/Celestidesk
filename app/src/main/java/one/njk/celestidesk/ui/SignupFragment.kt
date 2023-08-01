@@ -56,6 +56,7 @@ class SignupFragment: Fragment() {
                         Role.EMPLOYEE,
                         inputPassword
                     )
+                    // TODO: Ask for role in form
 
                     if(!viewModel.validateAndSignUp(raw))
                         Toast.makeText(context, "verify entered details!", Toast.LENGTH_SHORT).show()
