@@ -44,5 +44,8 @@ interface ApiService {
     @GET("api/transaction/history")
     suspend fun getPastTransactions(): Transactions
 
+    @POST("api/transaction/message")
+    suspend fun notifyParent()
+    // Trello is costly, phone is hardcoded
 
 }
