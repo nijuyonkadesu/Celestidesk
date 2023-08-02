@@ -22,7 +22,7 @@ data class NetworkPendingRequest(
     var to: String = "2023-07-31T13:12:01.129Z",
     @Json(name = "__v") val v: Int
 )
-// TODO: Use Date type for requested date
+
 
 enum class Stage {
     APPROVED, REJECTED, IN_PROCESS, IN_REVIEW
