@@ -1,6 +1,7 @@
 package one.njk.celestidesk.database
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -27,6 +28,7 @@ class RolesDataStore(private val context: Context) {
 
     suspend fun getRole(): Role {
         val role = context.rolesDataStore.data.first()[ROLE]
+        Log.d("pref", "$role")
         return role?.let { Role.valueOf(it) } ?: Role.EMPLOYEE
     }
 
@@ -40,6 +42,7 @@ class RolesDataStore(private val context: Context) {
     }
 
     suspend fun setToken(tokenResponse: TokenResponse) {
+        Log.d("pref", "saved: ${tokenResponse.role}")
         setRole(tokenResponse.role)
         context.rolesDataStore.edit {
             it[TOKEN] = tokenResponse.token

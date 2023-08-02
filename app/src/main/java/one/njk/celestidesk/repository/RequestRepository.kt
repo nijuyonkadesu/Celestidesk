@@ -28,6 +28,7 @@ class RequestRepository @Inject constructor(
             val token = pref.getToken()
             try {
                 val requests = api.getPendingRequests("Bearer ${token.token}").asDatabaseModel()
+                requestsDao.invalidateCache()
                 requestsDao.savePendingRequests(requests)
 
             } catch (e: HttpException) {
@@ -45,9 +46,10 @@ class RequestRepository @Inject constructor(
 
     suspend fun makeDecision(decision: DecisionRequest) {
         try {
-            // TODO: Nuke it when New Request layout is done
-            requestsDao.updateRequest(decision.reqID, decision.decision)
-            val message = api.makeDecision(decision)
+//            // TODO: Nuke it when New Request layout is done
+//            requestsDao.updateRequest(decision.reqID, decision.decision)
+            val token = pref.getToken()
+            val message = api.makeDecision("Bearer ${token.token}", decision)
             Log.d("network", message.message)
             refreshPendingRequests()
 

@@ -18,6 +18,9 @@ interface RequestsDao {
     @Upsert
     fun savePendingRequests(requests: List<DatabasePendingRequest>)
 
+    @Query("delete from DatabasePendingRequest")
+    fun invalidateCache()
+
     // TODO: Nuke this once server is ready
     @Query("update DatabasePendingRequest SET status = :decision WHERE _id = :requestId")
     fun updateRequest(requestId: String, decision: Decision)

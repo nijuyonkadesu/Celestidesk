@@ -37,6 +37,7 @@ interface ApiService {
 
     @POST("api/transaction/decide")
     suspend fun makeDecision(
+        @Header("Authorization") token: String,
         @Body decisionRequest: DecisionRequest
     ): Message
 
