@@ -27,6 +27,17 @@ data class DatabasePendingRequest(
     val to: LocalDateTime
 )
 
+// TODO: Create a Class for Transactions
+// TODO: Make it FTS4 compliant
+// TODO: Perform Search in SearchFragment
+/***
+ * 1. Set Content Entity (Transaction class)
+ * 2. Create Entity: TransactionFts (with what fields we shd consider for finding search results)
+ * 3. ✅ @Fts4(contentEntity) ❌ Map Transaction -> TransactionFts https://gist.github.com/joaocruz04/4667d9ae9fa884cd6c70f93f66bb6fd4
+ * 4. Include Fts entity to room: Return List<>
+ * 5. Search!! @Query("SELECT * FROM note_fts WHERE note_fts MATCH :searchText")
+ */
+
 fun List<DatabasePendingRequest>.asDomainModel(): List<BreakRequest> {
     return map {
         BreakRequest(

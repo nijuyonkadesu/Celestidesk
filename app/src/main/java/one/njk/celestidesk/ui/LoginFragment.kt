@@ -100,4 +100,3 @@ class LoginFragment: Fragment() {
         return false
     }
 }
-// TODO: Save role during SignUp or it's better if we know role on login (along with token) in TokenResponse
