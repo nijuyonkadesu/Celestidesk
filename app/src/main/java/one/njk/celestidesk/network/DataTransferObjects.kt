@@ -1,6 +1,7 @@
 package one.njk.celestidesk.network
 
 import com.squareup.moshi.Json
+import kotlinx.datetime.LocalDateTime
 import one.njk.celestidesk.database.DatabasePendingRequest
 import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.domain.BreakRequest
@@ -16,7 +17,9 @@ data class NetworkPendingRequest(
     val message: String,
     @Json(name = "requestdate") val requestDate: String,
     val status: Stage,
-    val time: String,
+    var time: String = "2023-07-31T13:12:01.129Z",
+    var from: String = "2023-07-31T13:12:01.129Z",
+    var to: String = "2023-07-31T13:12:01.129Z",
     @Json(name = "__v") val v: Int
 )
 // TODO: Use Date type for requested date
@@ -43,9 +46,23 @@ fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingReques
             message = it.message,
             requestDate = it.requestDate,
             status = it.status,
-            time = it.time
+            time = it.time,
+            from = it.from.toDate(),
+            to = it.to.toDate()
         )
     }
+}
+
+fun String.toDate(): LocalDateTime {
+
+    val yyyy = this.slice(0..3).toInt()
+    val MM = this.slice(5..6).toInt()
+    val dd = this.slice(8..9).toInt()
+    val HH = this.slice(11..12).toInt()
+    val mm = this.slice(14..15).toInt()
+
+    // "${yyyy}-${MM}-${dd}T${HH}:${mm}:00.000Z"
+    return LocalDateTime(yyyy, MM, dd, HH, mm, 0, 0)
 }
 
 fun NetworkPendingRequestContainer.asDomainModel(): List<BreakRequest> {

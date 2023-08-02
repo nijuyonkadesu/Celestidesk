@@ -33,6 +33,7 @@ android {
         buildConfigField "String" , "BASE_URL" , baseUrl
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {

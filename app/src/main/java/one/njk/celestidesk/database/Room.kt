@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Query
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 import one.njk.celestidesk.network.Decision
@@ -27,6 +28,7 @@ interface RequestsDao {
 }
 // TODO: Use orderby once date things is implemented
 @Database(entities = [DatabasePendingRequest::class], version = 1, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class RequestDatabase: RoomDatabase() {
     abstract val requestsDao: RequestsDao
 }

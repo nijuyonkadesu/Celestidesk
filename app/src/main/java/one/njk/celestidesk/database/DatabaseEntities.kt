@@ -3,6 +3,13 @@ package one.njk.celestidesk.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.ProvidedTypeConverter
+import androidx.room.TypeConverter
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.Stage
 
@@ -16,6 +23,8 @@ data class DatabasePendingRequest(
     @ColumnInfo(name = "request_date") val requestDate: String,
     val status: Stage,
     val time: String,
+    val from: LocalDateTime,
+    val to: LocalDateTime
 )
 
 fun List<DatabasePendingRequest>.asDomainModel(): List<BreakRequest> {
@@ -30,3 +39,17 @@ fun List<DatabasePendingRequest>.asDomainModel(): List<BreakRequest> {
     }
 }
 
+@ProvidedTypeConverter
+class Converters {
+    @TypeConverter
+    fun dateToTimeStamp(date: LocalDateTime): Long {
+        return date.toInstant(TimeZone.UTC).toEpochMilliseconds()
+    }
+
+    @TypeConverter
+    fun timeStampToDate(value: Long): LocalDateTime {
+        return Instant
+            .fromEpochMilliseconds(value)
+            .toLocalDateTime(TimeZone.UTC)
+    }
+}
