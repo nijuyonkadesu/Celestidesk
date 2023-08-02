@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import one.njk.celestidesk.database.Converters
 import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.database.RequestDatabase
 import one.njk.celestidesk.database.RequestsDao
@@ -50,11 +51,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context)
+    fun provideDatabase(@ApplicationContext context: Context, converters: Converters)
     = Room.databaseBuilder(
         context = context,
         RequestDatabase::class.java, "celestidesk"
     ).fallbackToDestructiveMigration()
+        .addTypeConverter(converters)
         .build()
 
     @Provides
@@ -65,5 +67,11 @@ object AppModule {
     @Singleton
     fun provideRepository(requestsDao: RequestsDao, api: ApiService, pref: RolesDataStore): RequestRepository {
         return RequestRepository(requestsDao, api, pref)
+    }
+
+    @Provides
+    @Singleton
+    fun provideConverters(): Converters {
+        return Converters()
     }
 }

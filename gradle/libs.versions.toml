@@ -21,11 +21,12 @@ lifecycle = "2.6.1"
 datastore = "1.0.0"
 room = "2.5.2"
 mail = "1.6.2"
+date = "0.4.0"
 
 [bundles]
 nav = ["nav-fragment", "nav-ui"]
 testing = ["androidx-test-ext", "androidx-test-espresso"]
-androidx = ["androidx-appcompat", "androidx-core", "androidx-constraintlayout", "androidx-recycler-view", "lifecycle-livedata", "lifecycle-viewmodel", "lifecycle-runtime", "datastore"]
+androidx = ["androidx-appcompat", "androidx-core", "androidx-constraintlayout", "androidx-recycler-view", "lifecycle-livedata", "lifecycle-viewmodel", "lifecycle-runtime", "datastore", "coroutines", "date-ktx"]
 retrofit = ["retrofit-moshi", "moshi"]
 mail = ["android-mail", "android-mail-activation"]
 
@@ -55,6 +56,9 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 # Mail Client
 android-mail = { module = "com.sun.mail:android-mail", version.ref = "mail" }
 android-mail-activation = { module = "com.sun.mail:android-activation", version.ref = "mail" }
+
+# Date ktx
+date-ktx = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "date" }
 
 # default dependancies / androidx
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
