@@ -1,15 +1,15 @@
 package one.njk.celestidesk.domain
 
+import kotlinx.datetime.LocalDateTime
 import one.njk.celestidesk.network.Stage
 
 data class BreakRequest(
     val id: String,
     val subject: String,
     val message: String,
-    val date: String = "2023-01-03",
+    val date: LocalDateTime,
     val status: Stage
 ) {
     val dateShort
-        get() = date.slice(5..9)
+        get() = "${date.dayOfMonth} / ${date.month}"
 }
-// TODO: Use Date type for requested date

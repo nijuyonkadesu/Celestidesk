@@ -2,6 +2,7 @@ package one.njk.celestidesk.network
 
 import com.squareup.moshi.Json
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.database.DatabasePendingRequest
 import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.domain.BreakRequest
@@ -46,7 +47,7 @@ fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingReques
             message = it.message,
             requestDate = it.requestDate,
             status = it.status,
-            time = it.time,
+            time = it.time.toDate(),
             from = it.from.toDate(),
             to = it.to.toDate()
         )
@@ -54,15 +55,8 @@ fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingReques
 }
 
 fun String.toDate(): LocalDateTime {
-
-    val yyyy = this.slice(0..3).toInt()
-    val MM = this.slice(5..6).toInt()
-    val dd = this.slice(8..9).toInt()
-    val HH = this.slice(11..12).toInt()
-    val mm = this.slice(14..15).toInt()
-
-    // "${yyyy}-${MM}-${dd}T${HH}:${mm}:00.000Z"
-    return LocalDateTime(yyyy, MM, dd, HH, mm, 0, 0)
+     return this.slice(0 until this.lastIndex).toLocalDateTime()
+    // shouldn't have Z designator at the end
 }
 
 fun NetworkPendingRequestContainer.asDomainModel(): List<BreakRequest> {
@@ -71,7 +65,7 @@ fun NetworkPendingRequestContainer.asDomainModel(): List<BreakRequest> {
             id = it.id,
             subject = it.subject,
             message = it.message,
-            date = it.time,
+            date = it.time.slice(0 until it.time.lastIndex).toLocalDateTime(),
             status = it.status
         )
     }
