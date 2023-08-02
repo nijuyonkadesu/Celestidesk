@@ -26,7 +26,7 @@ interface RequestsDao {
     @Query("update DatabasePendingRequest SET status = :decision WHERE _id = :requestId")
     fun updateRequest(requestId: String, decision: Decision)
 }
-// TODO: Use orderby once date things is implemented
+// TODO: Use FTS4 once transaction things is implemented
 @Database(entities = [DatabasePendingRequest::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RequestDatabase: RoomDatabase() {
