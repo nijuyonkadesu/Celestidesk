@@ -48,4 +48,11 @@ class RolesDataStore(private val context: Context) {
             it[TOKEN] = tokenResponse.token
         }
     }
+
+    suspend fun format() {
+        context.rolesDataStore.edit {
+            it[ROLE] = Role.EMPLOYEE.toString()
+            it[TOKEN] = ""
+        }
+    }
 }
