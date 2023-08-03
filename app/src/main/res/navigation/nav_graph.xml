@@ -10,6 +10,11 @@
         android:name="one.njk.celestidesk.ui.RequestFragment"
         android:label="@string/request_fragment_label"
         tools:layout="@layout/fragment_request">
+        <action
+            android:id="@+id/action_requestFragment_to_startFragment"
+            app:destination="@id/startFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
