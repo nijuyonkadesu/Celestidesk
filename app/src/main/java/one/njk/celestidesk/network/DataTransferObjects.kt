@@ -72,7 +72,7 @@ fun NetworkPendingRequestContainer.asDomainModel(): List<BreakRequest> {
 }
 
 enum class Decision {
-    APPROVED, REJECTED
+    ACCEPTED, REJECTED
 }
 
 data class Message(

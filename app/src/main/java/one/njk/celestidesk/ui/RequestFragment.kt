@@ -146,7 +146,7 @@ class RequestFragment : Fragment() {
                  viewModel.decide(decision, breakRequest)
             }
             .setPositiveButton(getString(R.string.button_approve)) { _, _ ->
-                val decision = DecisionRequest(breakRequest.id, Decision.APPROVED)
+                val decision = DecisionRequest(breakRequest.id, Decision.ACCEPTED)
                 viewModel.decide(decision, breakRequest)
             }
             .show()

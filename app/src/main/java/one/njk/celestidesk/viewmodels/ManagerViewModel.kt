@@ -39,7 +39,7 @@ class ManagerViewModel @Inject constructor(val repository: RequestRepository): V
     override fun decide(decision: DecisionRequest, breakRequest: BreakRequest) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.makeDecision(decision)
-            if(decision.decision == Decision.APPROVED) {
+            if(decision.decision == Decision.ACCEPTED) {
                 fireMail(decision, breakRequest)
             }
         }
