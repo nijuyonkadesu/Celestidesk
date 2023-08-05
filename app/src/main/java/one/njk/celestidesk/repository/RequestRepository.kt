@@ -24,19 +24,11 @@ class RequestRepository @Inject constructor(
     ) {
 
     suspend fun refreshPendingRequests(){
-        withContext(Dispatchers.IO) {
+        failsafe {
             val token = pref.getToken()
-            try {
-                val requests = api.getPendingRequests("Bearer ${token.token}").asDatabaseModel()
-                requestsDao.invalidateCache()
-                requestsDao.savePendingRequests(requests)
-
-            } catch (e: HttpException) {
-                Log.d("network", "${e.message}")
-
-            } catch (e: Exception){
-                Log.d("network", "${e.message}")
-            }
+            val requests = api.getPendingRequests("Bearer ${token.token}").asDatabaseModel()
+            requestsDao.invalidateCache()
+            requestsDao.savePendingRequests(requests)
         }
     }
 
@@ -45,19 +37,19 @@ class RequestRepository @Inject constructor(
     }
 
     suspend fun makeDecision(decision: DecisionRequest) {
-        try {
-//            // TODO: Nuke it when New Request layout is done
-//            requestsDao.updateRequest(decision.reqID, decision.decision)
+        failsafe {
             val token = pref.getToken()
             val message = api.makeDecision("Bearer ${token.token}", decision)
             Log.d("network", message.message)
             refreshPendingRequests()
+        }
+    }
 
-        } catch (e: HttpException){
-            Log.d("network", "${e.message}")
-
-        } catch (e: Exception){
-            Log.d("network", "fatal: ${e.message}")
+    suspend fun updateTransactions(){
+        failsafe {
+            val token = pref.getToken()
+            val transactions = api.getPastTransactions("Bearer ${token.token}")
+            Log.d("network", transactions.toString())
         }
     }
 
@@ -65,4 +57,17 @@ class RequestRepository @Inject constructor(
         sendEmail(subject, "Your request `$body` got $decision by MANAGER")
     }
     // TODO: Make it more dynamic and sensible - Replace with SMS
+
+    private suspend fun failsafe(block: suspend () -> Unit) {
+        withContext(Dispatchers.IO) {
+            try {
+                block()
+            } catch (e: HttpException) {
+                Log.d("network", "${e.message}")
+
+            } catch (e: Exception){
+                Log.d("network", "fatal: ${e.message}")
+            }
+        }
+    }
 }
