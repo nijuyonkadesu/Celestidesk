@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import one.njk.celestidesk.database.RequestsDao
 import one.njk.celestidesk.database.RolesDataStore
+import one.njk.celestidesk.database.TransactionDao
 import one.njk.celestidesk.database.asDomainModel
 import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.Decision
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 class RequestRepository @Inject constructor(
     private val requestsDao: RequestsDao,
+    private val transactionDao: TransactionDao,
     private val api: ApiService,
     private val pref: RolesDataStore
     ) {
@@ -50,6 +52,7 @@ class RequestRepository @Inject constructor(
             val token = pref.getToken()
             val transactions = api.getPastTransactions("Bearer ${token.token}")
             Log.d("network", transactions.toString())
+            transactionDao.updateTransactions(transactions.asDatabaseModel())
         }
     }
 

@@ -4,6 +4,7 @@ import com.squareup.moshi.Json
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.database.DatabasePendingRequest
+import one.njk.celestidesk.database.DatabaseTransaction
 import one.njk.celestidesk.domain.BreakRequest
 
 data class NetworkPendingRequestContainer(
@@ -85,14 +86,14 @@ data class DecisionRequest(
 )
 
 // --------------------- Transaction Model [STARTS] -------------------------- //
-data class NetworkTransactions (
+data class NetworkTransactionsContainer (
     val history: List<ActionEmbed>
 )
 data class ActionEmbed (
     @Json(name = "_id") val id: String,
     val origin: CreatorEmbed,
     val responder: CreatorEmbed,
-    val request: RequestEmbed?,
+    val request: NetworkRequestEmbed?,
     val result: ActionResult,
     val time: String,
     @Json(name = "__v") val v: Int
@@ -100,7 +101,7 @@ data class ActionEmbed (
 data class CreatorEmbed (
     val name: String
 )
-data class RequestEmbed (
+data class NetworkRequestEmbed (
     val subject: String,
     val message: String,
     val status: Stage,
@@ -110,6 +111,22 @@ data class RequestEmbed (
 enum class ActionResult {
     ACCEPTED, REJECTED, EXPIRED
 } // In UI, Stage -> ActionStatus (eg: IN_REVIEW -> REJECTED)
+
+fun NetworkTransactionsContainer.asDatabaseModel(): List<DatabaseTransaction> {
+    return history.map {
+        DatabaseTransaction(
+            id = it.id,
+            origin = it.origin.name,
+            subject = it.request?.subject ?: "Not Found",
+            message = it.request?.message ?: "Not Found",
+            from = it.request?.from?.toDate() ?: LocalDateTime(2023, 8, 1, 0, 0, 0, 0),
+            to = it.request?.to?.toDate() ?: LocalDateTime(2023, 8, 2, 0, 0, 0, 0),
+            wasIn = it.request?.status ?: Stage.REJECTED,
+            nowIn = it.result,
+            responder = it.responder.name
+        )
+    }
+}
 
 // --------------------- Transaction Model [ENDS] -------------------------- //
 

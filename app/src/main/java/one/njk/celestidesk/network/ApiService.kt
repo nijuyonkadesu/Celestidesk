@@ -45,7 +45,7 @@ interface ApiService {
     @GET("api/transaction/history")
     suspend fun getPastTransactions(
         @Header("Authorization") token: String,
-    ): NetworkTransactions
+    ): NetworkTransactionsContainer
 
 
 }

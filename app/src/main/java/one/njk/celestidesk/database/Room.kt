@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
-import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.Stage
 
 @Dao
@@ -21,14 +20,19 @@ interface RequestsDao {
 
     @Query("delete from DatabasePendingRequest")
     fun invalidateCache()
-
-    // TODO: Nuke this once server is ready
-    @Query("update DatabasePendingRequest SET status = :decision WHERE _id = :requestId")
-    fun updateRequest(requestId: String, decision: Decision)
 }
+
+@Dao
+interface TransactionDao {
+
+    @Upsert
+    fun updateTransactions(transactions: List<DatabaseTransaction>)
+}
+
 // TODO: Use FTS4 once transaction things is implemented
-@Database(entities = [DatabasePendingRequest::class], version = 1, exportSchema = false)
+@Database(entities = [DatabasePendingRequest::class, DatabaseTransaction::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RequestDatabase: RoomDatabase() {
     abstract val requestsDao: RequestsDao
+    abstract val transactionDao: TransactionDao
 }

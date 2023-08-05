@@ -11,6 +11,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.domain.BreakRequest
+import one.njk.celestidesk.network.ActionResult
 import one.njk.celestidesk.network.Stage
 
 @Entity
@@ -49,6 +50,24 @@ fun List<DatabasePendingRequest>.asDomainModel(): List<BreakRequest> {
         )
     }
 }
+
+// --------------------- Transaction Model [STARTS] -------------------------- //
+
+@Entity
+data class DatabaseTransaction(
+    @PrimaryKey
+    @ColumnInfo(name = "_id") val id: String,
+    val origin: String,
+    val subject: String,
+    val message: String,
+    val from: LocalDateTime,
+    val to: LocalDateTime,
+    val wasIn: Stage,
+    val nowIn: ActionResult,
+    val responder: String,
+)
+
+// --------------------- Transaction Model [ENDS] -------------------------- //
 
 @ProvidedTypeConverter
 class Converters {
