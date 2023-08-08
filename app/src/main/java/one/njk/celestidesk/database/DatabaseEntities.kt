@@ -11,6 +11,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.domain.BreakRequest
+import one.njk.celestidesk.domain.History
 import one.njk.celestidesk.network.ActionResult
 import one.njk.celestidesk.network.Stage
 
@@ -67,6 +68,20 @@ data class DatabaseTransaction(
     val responder: String,
 )
 
+fun List<DatabaseTransaction>.asHistoryDomainModel(): List<History> {
+    return map {
+        History(
+            origin = it.origin,
+            subject = it.subject,
+            message = it.message,
+            from = it.from,
+            to = it.to,
+            wasIn = it.wasIn,
+            nowIn = it.nowIn,
+            responder = it.responder
+        )
+    }
+}
 // --------------------- Transaction Model [ENDS] -------------------------- //
 
 @ProvidedTypeConverter

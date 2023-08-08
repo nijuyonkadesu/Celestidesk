@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -80,6 +81,11 @@ class RequestFragment : Fragment() {
 
         viewModel.requestsFlow.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+        }
+
+        binding.fab.setOnClickListener {
+            findNavController()
+                .navigate(RequestFragmentDirections.actionRequestFragmentToSearchFragment())
         }
 
     }
