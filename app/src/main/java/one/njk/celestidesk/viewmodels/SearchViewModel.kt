@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import one.njk.celestidesk.repository.RequestRepository
 import javax.inject.Inject
@@ -18,4 +22,16 @@ class SearchViewModel @Inject constructor(
     }
 
     val transactions = repository.getTransactionsFlow().asLiveData()
+
+    private val searchTerm = MutableStateFlow("")
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val searchResultsFlow = searchTerm.flatMapLatest {
+        repository.searchTransactionsFlow(it)
+    }.asLiveData()
+
+    fun search(term: String) {
+        searchTerm.update { term }
+    }
+
 }

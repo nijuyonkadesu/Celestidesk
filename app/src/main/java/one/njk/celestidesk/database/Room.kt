@@ -30,10 +30,13 @@ interface TransactionDao {
 
     @Query("select * from DatabaseTransaction")
     fun getTransactionsFlow(): Flow<List<DatabaseTransaction>>
+
+    @Query("select * from FtsTransaction where FtsTransaction match :term")
+    fun searchTransactions(term: String): Flow<List<DatabaseTransaction>>
 }
 
 // TODO: Use FTS4 once transaction things is implemented
-@Database(entities = [DatabasePendingRequest::class, DatabaseTransaction::class], version = 1, exportSchema = false)
+@Database(entities = [DatabasePendingRequest::class, DatabaseTransaction::class, FtsTransaction::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RequestDatabase: RoomDatabase() {
     abstract val requestsDao: RequestsDao

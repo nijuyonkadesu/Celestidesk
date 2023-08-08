@@ -2,6 +2,9 @@ package one.njk.celestidesk.repository
 
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -39,10 +42,14 @@ class RequestRepository @Inject constructor(
         it.asDomainModel()
     }
 
-    // TODO: Accept Search Term & do FTS
     fun getTransactionsFlow() = transactionDao.getTransactionsFlow().flowOn(Dispatchers.Default).map {
         it.asHistoryDomainModel()
     }
+
+    @OptIn(FlowPreview::class)
+    fun searchTransactionsFlow(term: String) = transactionDao.searchTransactions(term).flowOn(Dispatchers.Default).map {
+        it.asHistoryDomainModel()
+    }.debounce(100).distinctUntilChanged()
 
     suspend fun makeDecision(decision: DecisionRequest) {
         failsafe {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,14 +32,18 @@ class SearchFragment: Fragment() {
         val adapter = SearchResultAdapter()
         binding.apply {
             results.adapter = adapter
+            searchView.editText.addTextChangedListener {
+                viewModel.search(it.toString())
+            }
+            // TODO: outside the searchview, display the full list in another recycler view
             searchView.editText.setOnEditorActionListener { textView, _, _ ->
                 searchBar.text = textView.text
-                searchView.hide()
-                // TODO: Call Search Function
+//                viewModel.search(textView.text.toString())
+//                searchView.hide()
                 false
             }
         }
-        viewModel.transactions.observe(viewLifecycleOwner) {
+        viewModel.searchResultsFlow.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
     }

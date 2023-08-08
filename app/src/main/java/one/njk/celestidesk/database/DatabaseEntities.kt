@@ -2,6 +2,7 @@ package one.njk.celestidesk.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Fts4
 import androidx.room.PrimaryKey
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
@@ -29,17 +30,6 @@ data class DatabasePendingRequest(
     val to: LocalDateTime
 )
 
-// TODO: Create a Class for Transactions
-// TODO: Make it FTS4 compliant
-// TODO: Perform Search in SearchFragment
-/***
- * 1. Set Content Entity (Transaction class)
- * 2. Create Entity: TransactionFts (with what fields we shd consider for finding search results)
- * 3. ✅ @Fts4(contentEntity) ❌ Map Transaction -> TransactionFts https://gist.github.com/joaocruz04/4667d9ae9fa884cd6c70f93f66bb6fd4
- * 4. Include Fts entity to room: Return List<>
- * 5. Search!! @Query("SELECT * FROM note_fts WHERE note_fts MATCH :searchText")
- */
-
 fun List<DatabasePendingRequest>.asDomainModel(): List<BreakRequest> {
     return map {
         BreakRequest(
@@ -57,7 +47,7 @@ fun List<DatabasePendingRequest>.asDomainModel(): List<BreakRequest> {
 @Entity
 data class DatabaseTransaction(
     @PrimaryKey
-    @ColumnInfo(name = "_id") val id: String,
+    @ColumnInfo(name = "id") val id: String,
     val origin: String,
     val subject: String,
     val message: String,
@@ -82,6 +72,23 @@ fun List<DatabaseTransaction>.asHistoryDomainModel(): List<History> {
         )
     }
 }
+
+@Fts4(contentEntity = DatabaseTransaction::class, notIndexed = ["from", "to", "id"])
+@Entity
+data class FtsTransaction (
+    @PrimaryKey
+    @ColumnInfo(name = "rowid")
+    val autoId: Int,
+    val id: String,
+    val origin: String,
+    val subject: String,
+    val message: String,
+    val from: LocalDateTime,
+    val to: LocalDateTime,
+    val wasIn: Stage,
+    val nowIn: ActionResult,
+    val responder: String,
+)
 // --------------------- Transaction Model [ENDS] -------------------------- //
 
 @ProvidedTypeConverter
