@@ -32,7 +32,17 @@ class SearchFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val currentTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
-        val adapter = SearchResultAdapter(
+        val adapter = SearchResultAdapter()
+        binding.apply {
+            results.adapter = adapter
+            searchView.editText.setOnEditorActionListener { textView, _, _ ->
+                searchBar.text = textView.text
+                searchView.hide()
+                // TODO: Call Search Function
+                false
+            }
+        }
+        adapter.submitList(
             listOf(
                 History(
                     origin = "Customer Support",
@@ -96,14 +106,5 @@ class SearchFragment: Fragment() {
                 ),
             )
         )
-        binding.apply {
-            results.adapter = adapter
-            searchView.editText.setOnEditorActionListener { textView, _, _ ->
-                searchBar.text = textView.text
-                searchView.hide()
-                // TODO: Call Search Function
-                false
-            }
-        }
     }
 }
