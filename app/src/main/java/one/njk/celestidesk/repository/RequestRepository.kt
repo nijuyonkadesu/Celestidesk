@@ -9,6 +9,7 @@ import one.njk.celestidesk.database.RequestsDao
 import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.database.TransactionDao
 import one.njk.celestidesk.database.asDomainModel
+import one.njk.celestidesk.database.asHistoryDomainModel
 import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
@@ -36,6 +37,11 @@ class RequestRepository @Inject constructor(
 
     fun getRequestsFlow(stage: Stage) = requestsDao.getRequestsFlow(stage).flowOn(Dispatchers.Default).map {
         it.asDomainModel()
+    }
+
+    // TODO: Accept Search Term & do FTS
+    fun getTransactionsFlow() = transactionDao.getTransactionsFlow().flowOn(Dispatchers.Default).map {
+        it.asHistoryDomainModel()
     }
 
     suspend fun makeDecision(decision: DecisionRequest) {

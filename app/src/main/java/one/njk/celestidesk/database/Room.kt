@@ -27,6 +27,9 @@ interface TransactionDao {
 
     @Upsert
     fun updateTransactions(transactions: List<DatabaseTransaction>)
+
+    @Query("select * from DatabaseTransaction")
+    fun getTransactionsFlow(): Flow<List<DatabaseTransaction>>
 }
 
 // TODO: Use FTS4 once transaction things is implemented

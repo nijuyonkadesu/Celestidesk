@@ -5,20 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.adapters.SearchResultAdapter
 import one.njk.celestidesk.databinding.FragmentSearchBinding
-import one.njk.celestidesk.domain.History
-import one.njk.celestidesk.network.ActionResult
-import one.njk.celestidesk.network.Stage
+import one.njk.celestidesk.viewmodels.SearchViewModel
 
 @AndroidEntryPoint
 class SearchFragment: Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
+    private val viewModel: SearchViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,7 +28,6 @@ class SearchFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val currentTime = Clock.System.now().toLocalDateTime(TimeZone.UTC)
         val adapter = SearchResultAdapter()
         binding.apply {
             results.adapter = adapter
@@ -42,69 +38,8 @@ class SearchFragment: Fragment() {
                 false
             }
         }
-        adapter.submitList(
-            listOf(
-                History(
-                    origin = "Customer Support",
-                    subject = "New Support Ticket",
-                    message = "I need help with my account.",
-                    from = currentTime,
-                    to = currentTime,
-                    wasIn = Stage.IN_REVIEW,
-                    nowIn = ActionResult.ACCEPTED,
-                    responder = "John Doe",
-                ),
-                History(
-                    origin = "Customer Support",
-                    subject = "New Support Ticket",
-                    message = "I need help with my account.",
-                    from = currentTime,
-                    to = currentTime,
-                    wasIn = Stage.IN_REVIEW,
-                    nowIn = ActionResult.ACCEPTED,
-                    responder = "John Doe",
-                ),
-                History(
-                    origin = "Customer Support",
-                    subject = "New Support Ticket",
-                    message = "I need help with my account.",
-                    from = currentTime,
-                    to = currentTime,
-                    wasIn = Stage.IN_REVIEW,
-                    nowIn = ActionResult.ACCEPTED,
-                    responder = "John Doe",
-                ),
-                History(
-                    origin = "Customer Support",
-                    subject = "New Support Ticket",
-                    message = "I need help with my account.",
-                    from = currentTime,
-                    to = currentTime,
-                    wasIn = Stage.IN_REVIEW,
-                    nowIn = ActionResult.ACCEPTED,
-                    responder = "John Doe",
-                ),
-                History(
-                    origin = "Customer Support",
-                    subject = "New Support Ticket",
-                    message = "I need help with my account.",
-                    from = currentTime,
-                    to = currentTime,
-                    wasIn = Stage.IN_REVIEW,
-                    nowIn = ActionResult.ACCEPTED,
-                    responder = "John Doe",
-                ),
-                History(
-                    origin = "Customer Support",
-                    subject = "New Support Ticket",
-                    message = "I need help with my account.",
-                    from = currentTime,
-                    to = currentTime,
-                    wasIn = Stage.IN_REVIEW,
-                    nowIn = ActionResult.ACCEPTED,
-                    responder = "John Doe",
-                ),
-            )
-        )
+        viewModel.transactions.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
     }
 }
