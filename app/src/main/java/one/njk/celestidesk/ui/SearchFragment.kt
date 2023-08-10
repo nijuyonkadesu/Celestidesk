@@ -32,14 +32,14 @@ class SearchFragment: Fragment() {
         val adapter = SearchResultAdapter()
         binding.apply {
             results.adapter = adapter
+            unfiltered.adapter = adapter
+
             searchView.editText.addTextChangedListener {
                 viewModel.search(it.toString())
             }
-            // TODO: outside the searchview, display the full list in another recycler view
             searchView.editText.setOnEditorActionListener { textView, _, _ ->
                 searchBar.text = textView.text
-//                viewModel.search(textView.text.toString())
-//                searchView.hide()
+                searchView.hide()
                 false
             }
         }

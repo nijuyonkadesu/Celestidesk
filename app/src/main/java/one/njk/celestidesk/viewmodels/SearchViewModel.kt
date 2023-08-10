@@ -27,7 +27,7 @@ class SearchViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val searchResultsFlow = searchTerm.flatMapLatest {
-        repository.searchTransactionsFlow(it)
+        repository.allOrSearchTransactionsFlow(it)
     }.asLiveData()
 
     fun search(term: String) {
