@@ -43,6 +43,7 @@ class RequestFragment : Fragment() {
     private var _binding: FragmentRequestBinding? = null
     @Inject
     lateinit var rolesDataStore: RolesDataStore
+    private lateinit var currentRole: Role
     private lateinit var viewModel: RoleAgreement
 
     @DrawableRes private var fabIcon = R.drawable.search
@@ -55,12 +56,12 @@ class RequestFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
-            val role = rolesDataStore.getRole()
-            if(role == Role.EMPLOYEE) {
+            currentRole = rolesDataStore.getRole()
+            if(currentRole == Role.EMPLOYEE) {
                 fabIcon = R.drawable.add
                 fabHint = R.string.create_fab
             }
-            viewModel = chooseLogic(role)
+            viewModel = chooseLogic(currentRole)
             viewModel.refreshRequests()
         }
     }
@@ -85,7 +86,7 @@ class RequestFragment : Fragment() {
         addFilterChips(binding.filter, stages, lifecycleScope)
         val adapter = RequestListAdapter {
             lifecycleScope.launch {
-                if(rolesDataStore.getRole() != Role.EMPLOYEE)
+                if(currentRole != Role.EMPLOYEE)
                     showConfirmationDialog(it)
             }
         }
@@ -96,8 +97,10 @@ class RequestFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            findNavController()
-                .navigate(RequestFragmentDirections.actionRequestFragmentToSearchFragment())
+            if(currentRole != Role.EMPLOYEE)
+                findNavController()
+                    .navigate(RequestFragmentDirections.actionRequestFragmentToSearchFragment())
+                // TODO: Create a new requests screen
         }
 
     }
