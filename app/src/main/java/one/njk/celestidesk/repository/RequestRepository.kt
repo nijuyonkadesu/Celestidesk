@@ -54,7 +54,7 @@ class RequestRepository @Inject constructor(
         return if(term.isNotEmpty())
             transactionDao.searchTransactions("*$term*").flowOn(Dispatchers.Default).map {
                 it.asHistoryDomainModel()
-            }.debounce(100).distinctUntilChanged()
+            }
         else
             getTransactionsFlow()
     }
