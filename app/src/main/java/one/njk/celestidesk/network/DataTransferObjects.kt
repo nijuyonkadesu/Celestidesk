@@ -26,17 +26,18 @@ data class NetworkPendingRequest(
 
 
 enum class Stage {
-    ACCEPTED, REJECTED, IN_PROCESS, IN_REVIEW
+    ACCEPTED, REJECTED, IN_PROCESS, IN_REVIEW, PENDING
 }
-// TODO:  IN_PROCESS -> TEAM_LEAD, IN_REVIEW (Final) -> MANAGER
+// PENDING Doesn't exist!, here, using 'pending' to show results from both IN_REVIEW & IN_PROCESS
 fun String.toStage(): Stage {
     val statusMap = mapOf(
+        "Pending" to Stage.PENDING,
         "Accepted" to Stage.ACCEPTED,
         "Rejected" to Stage.REJECTED,
         "Processing" to Stage.IN_PROCESS,
         "Reviewing" to Stage.IN_REVIEW
     )
-    return statusMap[this] ?: statusMap["Approved"]!!
+    return statusMap[this] ?: statusMap["Accepted"]!!
 }
 
 fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingRequest> {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -44,7 +45,8 @@ class RequestFragment : Fragment() {
     lateinit var rolesDataStore: RolesDataStore
     private lateinit var viewModel: RoleAgreement
 
-    @DrawableRes private var iconId = R.drawable.search
+    @DrawableRes private var fabIcon = R.drawable.search
+    @StringRes private var fabHint = R.string.search_fab
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -54,7 +56,10 @@ class RequestFragment : Fragment() {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
             val role = rolesDataStore.getRole()
-            if(role == Role.EMPLOYEE) iconId = R.drawable.add
+            if(role == Role.EMPLOYEE) {
+                fabIcon = R.drawable.add
+                fabHint = R.string.create_fab
+            }
             viewModel = chooseLogic(role)
             viewModel.refreshRequests()
         }
@@ -74,7 +79,8 @@ class RequestFragment : Fragment() {
 
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name
-            _binding!!.fab.setImageResource(iconId)
+            _binding!!.fab.setIconResource(fabIcon)
+            _binding!!.fab.text = getString(fabHint)
         }
         addFilterChips(binding.filter, stages, lifecycleScope)
         val adapter = RequestListAdapter {

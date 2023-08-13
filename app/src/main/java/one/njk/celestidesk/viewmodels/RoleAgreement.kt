@@ -15,7 +15,8 @@ interface RoleAgreement {
     fun decide(decision: DecisionRequest, breakRequest: BreakRequest)
 }
 
-val stages = listOf("Processing", "Reviewing", "Accepted", "Rejected")
+// "Processing" + "Reviewing" = "Pending"
+val stages = listOf("Pending", "Accepted", "Rejected")
 data class RoleUiState(
     val stage: Stage,
 )

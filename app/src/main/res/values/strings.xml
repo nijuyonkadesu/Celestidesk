@@ -56,4 +56,6 @@
     <string name="hint_parent_number">Parent Number</string>
     <string name="signup">Sign Up</string>
     <string name="action_logout">Logout</string>
+    <string name="search_fab">Search</string>
+    <string name="create_fab">New Request</string>
 </resources>

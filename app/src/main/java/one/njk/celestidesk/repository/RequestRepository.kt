@@ -40,7 +40,13 @@ class RequestRepository @Inject constructor(
         }
     }
 
+    // Requests in ACCEPTED or REJECTED
     fun getRequestsFlow(stage: Stage) = requestsDao.getRequestsFlow(stage).flowOn(Dispatchers.Default).map {
+        it.asDomainModel()
+    }
+
+    // Requests in IN_REVIEW + IN_PROCESS
+    fun getPendingRequestsFlow() = requestsDao.getPendingRequestsFlow().flowOn(Dispatchers.Default).map {
         it.asDomainModel()
     }
 
