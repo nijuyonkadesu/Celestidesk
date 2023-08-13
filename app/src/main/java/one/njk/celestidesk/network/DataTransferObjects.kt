@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.database.DatabasePendingRequest
-import one.njk.celestidesk.database.Role
+import one.njk.celestidesk.database.DatabaseTransaction
 import one.njk.celestidesk.domain.BreakRequest
 
 data class NetworkPendingRequestContainer(
@@ -23,14 +23,15 @@ data class NetworkPendingRequest(
     var to: String = "2023-07-31T13:12:01.129Z",
     @Json(name = "__v") val v: Int
 )
-// TODO: Use Date type for requested date
+
 
 enum class Stage {
-    APPROVED, REJECTED, IN_PROCESS, IN_REVIEW
+    ACCEPTED, REJECTED, IN_PROCESS, IN_REVIEW
 }
+// TODO:  IN_PROCESS -> TEAM_LEAD, IN_REVIEW (Final) -> MANAGER
 fun String.toStage(): Stage {
     val statusMap = mapOf(
-        "Approved" to Stage.APPROVED,
+        "Accepted" to Stage.ACCEPTED,
         "Rejected" to Stage.REJECTED,
         "Processing" to Stage.IN_PROCESS,
         "Reviewing" to Stage.IN_REVIEW
@@ -84,32 +85,49 @@ data class DecisionRequest(
     val decision: Decision
 )
 
-// Transaction Classes
-data class Transactions (
-    val history: List<History>
+// --------------------- Transaction Model [STARTS] -------------------------- //
+data class NetworkTransactionsContainer (
+    val history: List<ActionEmbed>
 )
-
-data class History (
-    val id: String,
-    val origin: Origin,
-    val responder: String,
-    val request: HistoryStatus,
-    val result: String,
+data class ActionEmbed (
+    @Json(name = "_id") val id: String,
+    val origin: CreatorEmbed,
+    val responder: CreatorEmbed,
+    val request: NetworkRequestEmbed?,
+    val result: ActionResult,
     val time: String,
-    val v: Long
+    @Json(name = "__v") val v: Int
 )
-
-data class Origin (
-    val id: String,
-    val name: String,
-    val username: String,
-    @Json(name = "orghandle") val orgHandle: String,
-    val type: Role,
-    val v: Long
+data class CreatorEmbed (
+    val name: String
 )
-
-enum class HistoryStatus {
+data class NetworkRequestEmbed (
+    val subject: String,
+    val message: String,
+    val status: Stage,
+    val from: String,
+    val to: String
+)
+enum class ActionResult {
     ACCEPTED, REJECTED, EXPIRED
+} // In UI, Stage -> ActionStatus (eg: IN_REVIEW -> REJECTED)
+
+fun NetworkTransactionsContainer.asDatabaseModel(): List<DatabaseTransaction> {
+    return history.map {
+        DatabaseTransaction(
+            id = it.id,
+            origin = it.origin.name,
+            subject = it.request?.subject ?: "Not Found",
+            message = it.request?.message ?: "Not Found",
+            from = it.request?.from?.toDate() ?: LocalDateTime(2023, 8, 1, 0, 0, 0, 0),
+            to = it.request?.to?.toDate() ?: LocalDateTime(2023, 8, 2, 0, 0, 0, 0),
+            wasIn = it.request?.status ?: Stage.REJECTED,
+            nowIn = it.result,
+            responder = it.responder.name
+        )
+    }
 }
+
+// --------------------- Transaction Model [ENDS] -------------------------- //
 
 // TODO: Add database, domain models, mappers and a fragment with a view to show transaction (only Manager & Teamlead)

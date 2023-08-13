@@ -11,9 +11,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import one.njk.celestidesk.BuildConfig
 import one.njk.celestidesk.database.Converters
-import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.database.RequestDatabase
 import one.njk.celestidesk.database.RequestsDao
+import one.njk.celestidesk.database.RolesDataStore
+import one.njk.celestidesk.database.TransactionDao
 import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.auth.AuthRepository
 import one.njk.celestidesk.network.auth.AuthRepositoryImpl
@@ -65,8 +66,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository(requestsDao: RequestsDao, api: ApiService, pref: RolesDataStore): RequestRepository {
-        return RequestRepository(requestsDao, api, pref)
+    fun provideTransactionsDao(db: RequestDatabase) = db.transactionDao
+
+
+    @Provides
+    @Singleton
+    fun provideRepository(requestsDao: RequestsDao, transactionDao: TransactionDao, api: ApiService, pref: RolesDataStore): RequestRepository {
+        return RequestRepository(requestsDao, transactionDao, api, pref)
     }
 
     @Provides

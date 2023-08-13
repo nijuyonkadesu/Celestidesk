@@ -11,6 +11,9 @@
         android:label="@string/request_fragment_label"
         tools:layout="@layout/fragment_request">
         <action
+            android:id="@+id/action_requestFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
             android:id="@+id/action_requestFragment_to_startFragment"
             app:destination="@id/startFragment"
             app:popUpTo="@id/nav_graph"
@@ -53,4 +56,9 @@
             android:id="@+id/action_startFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="one.njk.celestidesk.ui.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search"/>
 </navigation>

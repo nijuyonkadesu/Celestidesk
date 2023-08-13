@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -40,7 +42,9 @@ class RequestFragment : Fragment() {
     private var _binding: FragmentRequestBinding? = null
     @Inject
     lateinit var rolesDataStore: RolesDataStore
-    lateinit var viewModel: RoleAgreement
+    private lateinit var viewModel: RoleAgreement
+
+    @DrawableRes private var iconId = R.drawable.search
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -49,7 +53,9 @@ class RequestFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
-            viewModel = chooseLogic()
+            val role = rolesDataStore.getRole()
+            if(role == Role.EMPLOYEE) iconId = R.drawable.add
+            viewModel = chooseLogic(role)
             viewModel.refreshRequests()
         }
     }
@@ -68,6 +74,7 @@ class RequestFragment : Fragment() {
 
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name
+            _binding!!.fab.setImageResource(iconId)
         }
         addFilterChips(binding.filter, stages, lifecycleScope)
         val adapter = RequestListAdapter {
@@ -82,6 +89,11 @@ class RequestFragment : Fragment() {
             adapter.submitList(it)
         }
 
+        binding.fab.setOnClickListener {
+            findNavController()
+                .navigate(RequestFragmentDirections.actionRequestFragmentToSearchFragment())
+        }
+
     }
 
     override fun onDestroyView() {
@@ -89,8 +101,8 @@ class RequestFragment : Fragment() {
         _binding = null
     }
 
-    private suspend fun chooseLogic(): RoleAgreement {
-        return when(rolesDataStore.getRole()){
+    private fun chooseLogic(role: Role): RoleAgreement {
+        return when(role){
             Role.EMPLOYEE -> {
                 val employeeViewModel: EmployeeViewModel by activityViewModels()
                 employeeViewModel
