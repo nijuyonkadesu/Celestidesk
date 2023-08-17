@@ -25,6 +25,7 @@ class SearchResultAdapter
                         message.text = item.message
                         action.text = item.action
                         responder.text = "By: ${item.responder}"
+                        // TODO: call string resource formatter
 
                         if (item.nowIn == ActionResult.REJECTED) action.setTextColor(Color.rgb(244, 67, 54))
                         else if (item.nowIn == ActionResult.EXPIRED) action.setTextColor(Color.rgb(255, 152, 0))
