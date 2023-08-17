@@ -18,17 +18,21 @@ data class BreakRequest(
     val to: LocalDateTime,
 ) {
     // Target Format: "9 Day(s): 8 July to 17 July."
+
+    private var totalDays = run {
+        var days = (to.date - from.date).days
+        if(days == 0) days = 1
+        days
+    }
+
     val dateShort
         get() =
-            "${(to.date - from.date).days} Day(s): ${from.dayOfMonth} ${from.month} to ${to.dayOfMonth} ${to.month}"
+            "$totalDays Day(s): ${from.dayOfMonth} ${from.month} to ${to.dayOfMonth} ${to.month}"
 
     fun getProgress(): Int {
 
         val currentMoment = Clock.System.now()
         val datetimeInUtc = currentMoment.toLocalDateTime(TimeZone.UTC)
-
-        var totalDays = (to.date - from.date).days
-        if(totalDays == 0) totalDays = 1
 
         var elapsed = (to.date - datetimeInUtc.date).days
         if (elapsed <= 0)

@@ -20,8 +20,13 @@ data class History (
     val toShort
         get() = "${to.dayOfMonth} ${to.month.toString().slice(0..2)}"
 
+    private var totalDays = run {
+        var days = (to.date - from.date).days
+        if(days == 0) days = 1
+        days
+    }
     val dateRange
-        get() = "${(to.date - from.date).days} Day(s) off"
+        get() = "$totalDays Day(s) off"
 
     val action
         get() = "$wasIn → $nowIn"
