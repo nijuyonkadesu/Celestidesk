@@ -29,7 +29,6 @@ import one.njk.celestidesk.viewmodels.EmployeeViewModel
 import one.njk.celestidesk.viewmodels.ManagerViewModel
 import one.njk.celestidesk.viewmodels.RoleAgreement
 import one.njk.celestidesk.viewmodels.TeamLeadViewModel
-import one.njk.celestidesk.viewmodels.stages
 import javax.inject.Inject
 
 /**
@@ -83,7 +82,7 @@ class RequestFragment : Fragment() {
             _binding!!.fab.setIconResource(fabIcon)
             _binding!!.fab.text = getString(fabHint)
         }
-        addFilterChips(binding.filter, stages, lifecycleScope)
+        addFilterChips(binding.filter, viewModel.stages, lifecycleScope)
         val adapter = RequestListAdapter {
             lifecycleScope.launch {
                 if(currentRole != Role.EMPLOYEE)

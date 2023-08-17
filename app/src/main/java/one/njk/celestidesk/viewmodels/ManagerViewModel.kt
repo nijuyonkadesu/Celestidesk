@@ -19,6 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ManagerViewModel @Inject constructor(val repository: RequestRepository): ViewModel(), RoleAgreement {
     override val name = "Manager Here"
+    // "Processing" + "Reviewing" = "Pending"
+    override val stages = listOf("Pending")
     override fun refreshRequests() {
         viewModelScope.launch {
             repository.refreshPendingRequests()

@@ -17,6 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TeamLeadViewModel @Inject constructor(val repository: RequestRepository): ViewModel(), RoleAgreement {
     override val name = "Team Lead here"
+    // "Processing" + "Reviewing" = "Pending"
+    override val stages = listOf("Pending")
     override fun refreshRequests() {
         viewModelScope.launch {
             repository.refreshPendingRequests()

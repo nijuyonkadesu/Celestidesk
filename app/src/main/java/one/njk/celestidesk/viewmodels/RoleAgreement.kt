@@ -10,13 +10,12 @@ interface RoleAgreement {
     val name: String
     val requestsFlow: LiveData<List<BreakRequest>>
     val uiState: MutableStateFlow<RoleUiState>
+    val stages: List<String>
     fun updateStage(stage: Stage)
     fun refreshRequests()
     fun decide(decision: DecisionRequest, breakRequest: BreakRequest)
 }
 
-// "Processing" + "Reviewing" = "Pending"
-val stages = listOf("Pending", "Accepted", "Rejected")
 data class RoleUiState(
     val stage: Stage,
 )
