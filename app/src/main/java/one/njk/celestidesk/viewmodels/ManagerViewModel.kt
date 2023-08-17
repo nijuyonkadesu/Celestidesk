@@ -19,6 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ManagerViewModel @Inject constructor(val repository: RequestRepository): ViewModel(), RoleAgreement {
     override val name = "Manager Here"
+    // "Processing" + "Reviewing" = "Pending"
+    override val stages = listOf("Pending")
     override fun refreshRequests() {
         viewModelScope.launch {
             repository.refreshPendingRequests()
@@ -33,7 +35,12 @@ class ManagerViewModel @Inject constructor(val repository: RequestRepository): V
     }
     @OptIn(ExperimentalCoroutinesApi::class)
     override val requestsFlow = uiState.flatMapLatest {
-        repository.getRequestsFlow(it.stage)
+        if(it.stage == Stage.PENDING) {
+            repository.getPendingRequestsFlow()
+        }
+        else {
+            repository.getRequestsFlow(it.stage)
+        }
     }.asLiveData()
 
     override fun decide(decision: DecisionRequest, breakRequest: BreakRequest) {

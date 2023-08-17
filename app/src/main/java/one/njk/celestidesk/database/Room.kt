@@ -15,6 +15,9 @@ interface RequestsDao {
     @Query("select * from DatabasePendingRequest where status = :status")
     fun getRequestsFlow(status: Stage): Flow<List<DatabasePendingRequest>>
 
+    @Query("select * from DatabasePendingRequest where status = :one OR status = :two")
+    fun getPendingRequestsFlow(one: Stage = Stage.IN_REVIEW, two: Stage = Stage.IN_PROCESS): Flow<List<DatabasePendingRequest>>
+
     @Upsert
     fun savePendingRequests(requests: List<DatabasePendingRequest>)
 

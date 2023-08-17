@@ -33,11 +33,14 @@ data class DatabasePendingRequest(
 fun List<DatabasePendingRequest>.asDomainModel(): List<BreakRequest> {
     return map {
         BreakRequest(
+            name = it.origin,
             id = it.id,
             subject = it.subject,
             message = it.message,
             date = it.time,
-            status = it.status
+            status = it.status,
+            from = it.from,
+            to = it.to
         )
     }
 }

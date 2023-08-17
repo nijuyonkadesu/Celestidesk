@@ -5,7 +5,6 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.database.DatabasePendingRequest
 import one.njk.celestidesk.database.DatabaseTransaction
-import one.njk.celestidesk.domain.BreakRequest
 
 data class NetworkPendingRequestContainer(
     val requests: List<NetworkPendingRequest>
@@ -17,6 +16,7 @@ data class NetworkPendingRequest(
     val subject: String,
     val message: String,
     @Json(name = "requestdate") val requestDate: String,
+    var emergency: Boolean = false,
     val status: Stage,
     var time: String = "2023-07-31T13:12:01.129Z",
     var from: String = "2023-07-31T13:12:01.129Z",
@@ -26,17 +26,18 @@ data class NetworkPendingRequest(
 
 
 enum class Stage {
-    ACCEPTED, REJECTED, IN_PROCESS, IN_REVIEW
+    ACCEPTED, REJECTED, IN_PROCESS, IN_REVIEW, PENDING
 }
-// TODO:  IN_PROCESS -> TEAM_LEAD, IN_REVIEW (Final) -> MANAGER
+// PENDING Doesn't exist!, here, using 'pending' to show results from both IN_REVIEW & IN_PROCESS
 fun String.toStage(): Stage {
     val statusMap = mapOf(
+        "Pending" to Stage.PENDING,
         "Accepted" to Stage.ACCEPTED,
         "Rejected" to Stage.REJECTED,
         "Processing" to Stage.IN_PROCESS,
         "Reviewing" to Stage.IN_REVIEW
     )
-    return statusMap[this] ?: statusMap["Approved"]!!
+    return statusMap[this] ?: statusMap["Accepted"]!!
 }
 
 fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingRequest> {
@@ -60,17 +61,6 @@ fun String.toDate(): LocalDateTime {
     // shouldn't have Z designator at the end
 }
 
-fun NetworkPendingRequestContainer.asDomainModel(): List<BreakRequest> {
-    return requests.map {
-        BreakRequest(
-            id = it.id,
-            subject = it.subject,
-            message = it.message,
-            date = it.time.slice(0 until it.time.lastIndex).toLocalDateTime(),
-            status = it.status
-        )
-    }
-}
 
 enum class Decision {
     ACCEPTED, REJECTED

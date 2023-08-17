@@ -19,7 +19,9 @@ class RequestListAdapter(
             binding.apply {
                 reasonSubject.text = req.subject
                 reason.text = req.message
+                name.text = req.name
                 time.text = req.dateShort
+                elapsedDays.progress = req.getProgress()
             }
         }
     }

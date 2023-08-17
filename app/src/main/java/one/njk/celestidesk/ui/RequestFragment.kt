@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,7 +29,6 @@ import one.njk.celestidesk.viewmodels.EmployeeViewModel
 import one.njk.celestidesk.viewmodels.ManagerViewModel
 import one.njk.celestidesk.viewmodels.RoleAgreement
 import one.njk.celestidesk.viewmodels.TeamLeadViewModel
-import one.njk.celestidesk.viewmodels.stages
 import javax.inject.Inject
 
 /**
@@ -42,9 +42,11 @@ class RequestFragment : Fragment() {
     private var _binding: FragmentRequestBinding? = null
     @Inject
     lateinit var rolesDataStore: RolesDataStore
+    private lateinit var currentRole: Role
     private lateinit var viewModel: RoleAgreement
 
-    @DrawableRes private var iconId = R.drawable.search
+    @DrawableRes private var fabIcon = R.drawable.search
+    @StringRes private var fabHint = R.string.search_fab
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -53,9 +55,12 @@ class RequestFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {
-            val role = rolesDataStore.getRole()
-            if(role == Role.EMPLOYEE) iconId = R.drawable.add
-            viewModel = chooseLogic(role)
+            currentRole = rolesDataStore.getRole()
+            if(currentRole == Role.EMPLOYEE) {
+                fabIcon = R.drawable.add
+                fabHint = R.string.create_fab
+            }
+            viewModel = chooseLogic(currentRole)
             viewModel.refreshRequests()
         }
     }
@@ -74,12 +79,13 @@ class RequestFragment : Fragment() {
 
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name
-            _binding!!.fab.setImageResource(iconId)
+            _binding!!.fab.setIconResource(fabIcon)
+            _binding!!.fab.text = getString(fabHint)
         }
-        addFilterChips(binding.filter, stages, lifecycleScope)
+        addFilterChips(binding.filter, viewModel.stages, lifecycleScope)
         val adapter = RequestListAdapter {
             lifecycleScope.launch {
-                if(rolesDataStore.getRole() != Role.EMPLOYEE)
+                if(currentRole != Role.EMPLOYEE)
                     showConfirmationDialog(it)
             }
         }
@@ -90,8 +96,10 @@ class RequestFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            findNavController()
-                .navigate(RequestFragmentDirections.actionRequestFragmentToSearchFragment())
+            if(currentRole != Role.EMPLOYEE)
+                findNavController()
+                    .navigate(RequestFragmentDirections.actionRequestFragmentToSearchFragment())
+                // TODO: Create a new requests screen
         }
 
     }
