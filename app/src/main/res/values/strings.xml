@@ -58,4 +58,7 @@
     <string name="action_logout">Logout</string>
     <string name="search_fab">Search</string>
     <string name="create_fab">New Request</string>
+    <string name="hint_subject">Subject</string>
+    <string name="hint_reason">Reason</string>
+    <string name="hint_duration">Duration</string>
 </resources>

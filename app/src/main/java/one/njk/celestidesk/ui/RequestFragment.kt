@@ -99,7 +99,10 @@ class RequestFragment : Fragment() {
             if(currentRole != Role.EMPLOYEE)
                 findNavController()
                     .navigate(RequestFragmentDirections.actionRequestFragmentToSearchFragment())
-                // TODO: Create a new requests screen
+            else {
+                val requestSheet = NewRequestSheet()
+                requestSheet.show(childFragmentManager, NewRequestSheet.TAG)
+            }
         }
 
     }
@@ -172,6 +175,3 @@ class RequestFragment : Fragment() {
             .show()
     }
 }
-// TODO: Profile Pic for users
-// TODO: >5 Request, it goes to Manager directly
-// TODO: 20min expiry after reaching manager
