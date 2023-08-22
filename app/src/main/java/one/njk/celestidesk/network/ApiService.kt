@@ -47,5 +47,10 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): NetworkTransactionsContainer
 
-
+    @GET("api/request/create")
+    suspend fun createNewRequest(
+        @Header("Authorization") token: String,
+        @Body request: NetworkNewRequest
+    ): Message
+    // TODO: Wrap message with sealed class
 }

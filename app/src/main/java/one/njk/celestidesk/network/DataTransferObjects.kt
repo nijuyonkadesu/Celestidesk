@@ -120,4 +120,8 @@ fun NetworkTransactionsContainer.asDatabaseModel(): List<DatabaseTransaction> {
 
 // --------------------- Transaction Model [ENDS] -------------------------- //
 
-// TODO: Add database, domain models, mappers and a fragment with a view to show transaction (only Manager & Teamlead)
+data class NetworkNewRequest(
+    val message: String,
+    val status: Stage,
+    val date: String,
+)
