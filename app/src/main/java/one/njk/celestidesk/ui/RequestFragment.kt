@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +31,7 @@ import one.njk.celestidesk.viewmodels.ManagerViewModel
 import one.njk.celestidesk.viewmodels.RoleAgreement
 import one.njk.celestidesk.viewmodels.TeamLeadViewModel
 import javax.inject.Inject
+import androidx.core.util.Pair
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -77,6 +79,14 @@ class RequestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select dates")
+                .build()
+
+        val requestSheet = NewRequestSheet {
+            dateRangePicker.show(childFragmentManager, "DATE_PICK")
+        }
+
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name
             _binding!!.fab.setIconResource(fabIcon)
@@ -100,8 +110,18 @@ class RequestFragment : Fragment() {
                 findNavController()
                     .navigate(RequestFragmentDirections.actionRequestFragmentToSearchFragment())
             else {
-                val requestSheet = NewRequestSheet()
                 requestSheet.show(childFragmentManager, NewRequestSheet.TAG)
+                dateRangePicker.addOnDismissListener {
+                    requestSheet.updateDateRange(dateRangePicker.selection)
+                }
+
+                /* TODO: add date selection constraints (restrict past dates)
+                * https://m3.material.io/components/date-pickers/overview
+                * https://github.com/material-components/material-components-android/blob/master/docs/components/DatePicker.md
+                *
+                * TODO: override onCancel & onDismiss of model sheet (dialogue interface) to send save req
+                * https://github.com/material-components/material-components-android/blob/master/docs/components/BottomSheet.md
+                * */
             }
         }
 

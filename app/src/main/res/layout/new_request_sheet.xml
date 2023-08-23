@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
 
-                    android:inputType="textMultiLine|text"
+                    android:inputType="text"
                     tools:text="Visit home for festival" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
 
-                    android:inputType="textMultiLine|text"
+                    android:inputType="text"
                     tools:text="Once in a while, like a human, I need to get out of my home" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -84,10 +84,11 @@
                 app:startIconDrawable="@drawable/date_range">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duration_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:inputType="date"/>
+                    android:inputType="none"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
