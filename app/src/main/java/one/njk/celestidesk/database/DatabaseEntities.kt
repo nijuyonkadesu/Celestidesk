@@ -23,7 +23,6 @@ data class DatabasePendingRequest(
     val origin: String,
     val subject: String,
     val message: String,
-    @ColumnInfo(name = "request_date") val requestDate: String,
     val status: Stage,
     val time: LocalDateTime,
     val from: LocalDateTime,

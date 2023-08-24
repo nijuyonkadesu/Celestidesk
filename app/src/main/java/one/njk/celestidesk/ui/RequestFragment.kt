@@ -123,7 +123,8 @@ class RequestFragment : Fragment() {
                 * TODO: override onCancel & onDismiss of model sheet (dialogue interface) to send save req
                 * https://github.com/material-components/material-components-android/blob/master/docs/components/BottomSheet.md
                 *
-                * TODO: Add Emergency / Regular Request button
+                * TODO: add remaining request count near button
+                * TODO: disable clicking emergency request unless normal req exhausts
                 * */
             }
         }

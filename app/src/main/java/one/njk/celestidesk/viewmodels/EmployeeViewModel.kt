@@ -34,7 +34,12 @@ class EmployeeViewModel @Inject constructor(val repository: RequestRepository): 
     }
     @OptIn(ExperimentalCoroutinesApi::class)
     override val requestsFlow = uiState.flatMapLatest {
-        repository.getRequestsFlow(it.stage)
+        if(it.stage == Stage.PENDING) {
+            repository.getPendingRequestsFlow()
+        }
+        else {
+            repository.getRequestsFlow(it.stage)
+        }
     }.asLiveData()
     override fun decide(decision: DecisionRequest, breakRequest: BreakRequest) {
         // Can't lol can't.
