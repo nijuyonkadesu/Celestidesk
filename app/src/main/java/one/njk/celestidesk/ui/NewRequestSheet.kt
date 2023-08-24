@@ -33,6 +33,7 @@ class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
         val inputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
+        _binding.normal.performClick()
         _binding.durationEdit.setOnFocusChangeListener { editText, hasFocus ->
             if(hasFocus){
                 datePicker()
