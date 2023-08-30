@@ -121,5 +121,7 @@ fun NetworkTransactionsContainer.asDatabaseModel(): List<DatabaseTransaction> {
 data class NetworkNewRequest(
     val message: String,
     val status: Stage,
-    val date: String,
+    val emergency: Boolean,
+    val from: Long,
+    val to: Long,
 )
