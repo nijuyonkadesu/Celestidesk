@@ -2,13 +2,9 @@ package one.njk.celestidesk.repository
 
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import one.njk.celestidesk.database.RequestsDao
 import one.njk.celestidesk.database.RolesDataStore
 import one.njk.celestidesk.database.TransactionDao
@@ -18,10 +14,11 @@ import one.njk.celestidesk.domain.History
 import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
+import one.njk.celestidesk.network.NetworkNewRequest
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.network.asDatabaseModel
+import one.njk.celestidesk.utils.failsafe
 import one.njk.celestidesk.utils.sendEmail
-import retrofit2.HttpException
 import javax.inject.Inject
 
 class RequestRepository @Inject constructor(
@@ -54,7 +51,6 @@ class RequestRepository @Inject constructor(
         it.asHistoryDomainModel()
     }
 
-    @OptIn(FlowPreview::class)
     fun allOrSearchTransactionsFlow(term: String): Flow<List<History>> {
 
         return if(term.isNotEmpty())
@@ -83,21 +79,16 @@ class RequestRepository @Inject constructor(
         }
     }
 
+    suspend fun createNewRequest(req: NetworkNewRequest) {
+        failsafe {
+            Log.d("new", "$req")
+            val token = pref.getToken()
+            api.createNewRequest("Bearer ${token.token}", req)
+        }
+    }
+
     fun sendMailFromRequest(subject: String, body: String, decision: Decision) {
         sendEmail(subject, "Your request `$body` got $decision by MANAGER")
     }
     // TODO: Make it more dynamic and sensible - Replace with SMS
-
-    private suspend fun failsafe(block: suspend () -> Unit) {
-        withContext(Dispatchers.IO) {
-            try {
-                block()
-            } catch (e: HttpException) {
-                Log.d("network", "${e.message}")
-
-            } catch (e: Exception){
-                Log.d("network", "fatal: ${e.message}")
-            }
-        }
-    }
 }

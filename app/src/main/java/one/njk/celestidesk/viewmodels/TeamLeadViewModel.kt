@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import one.njk.celestidesk.domain.BreakRequest
+import one.njk.celestidesk.domain.NewBreakRequest
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.repository.RequestRepository
@@ -40,5 +41,9 @@ class TeamLeadViewModel @Inject constructor(val repository: RequestRepository): 
         viewModelScope.launch {
             repository.makeDecision(decision)
         }
+    }
+
+    override fun newRequest(req: NewBreakRequest) {
+        // Can't lol
     }
 }

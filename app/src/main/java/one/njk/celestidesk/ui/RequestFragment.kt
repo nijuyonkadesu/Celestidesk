@@ -12,6 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -77,6 +79,20 @@ class RequestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        val calendarConstraints = CalendarConstraints.Builder()
+//            .setStart(MaterialDatePicker.todayInUtcMilliseconds())
+
+        val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
+                .setTitleText("Select dates")
+//                .setCalendarConstraints(calendarConstraints.build())
+                .build()
+
+        val requestSheet = NewRequestSheet(
+            { dateRangePicker.show(childFragmentManager, "DATE_PICK") },
+            { req ->
+                viewModel.newRequest(req)
+            })
+
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name
             _binding!!.fab.setIconResource(fabIcon)
@@ -99,7 +115,17 @@ class RequestFragment : Fragment() {
             if(currentRole != Role.EMPLOYEE)
                 findNavController()
                     .navigate(RequestFragmentDirections.actionRequestFragmentToSearchFragment())
-                // TODO: Create a new requests screen
+            else {
+                requestSheet.show(childFragmentManager, NewRequestSheet.TAG)
+                dateRangePicker.addOnDismissListener {
+                    requestSheet.updateDateRange(dateRangePicker.selection)
+                }
+
+                /*
+                * TODO: add remaining request count near button
+                * TODO: disable clicking emergency request unless normal req exhausts
+                * */
+            }
         }
 
     }
@@ -172,6 +198,3 @@ class RequestFragment : Fragment() {
             .show()
     }
 }
-// TODO: Profile Pic for users
-// TODO: >5 Request, it goes to Manager directly
-// TODO: 20min expiry after reaching manager
