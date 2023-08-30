@@ -119,9 +119,9 @@ fun NetworkTransactionsContainer.asDatabaseModel(): List<DatabaseTransaction> {
 // --------------------- Transaction Model [ENDS] -------------------------- //
 
 data class NetworkNewRequest(
+    val subject: String,
     val message: String,
-    val status: Stage,
     val emergency: Boolean,
-    val from: Long,
-    val to: Long,
+    val from: String,
+    val to: String,
 )

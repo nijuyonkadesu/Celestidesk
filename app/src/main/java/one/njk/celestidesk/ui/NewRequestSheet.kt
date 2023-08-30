@@ -2,6 +2,7 @@ package one.njk.celestidesk.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.databinding.NewRequestSheetBinding
+import one.njk.celestidesk.domain.NewBreakRequest
 
 class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
 
@@ -33,13 +35,41 @@ class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
         val inputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-        _binding.normal.performClick()
-        _binding.durationEdit.setOnFocusChangeListener { editText, hasFocus ->
-            if(hasFocus){
-                datePicker()
+        _binding.apply {
+
+            // Default value, coz android is headache
+            var isEmergency = false
+            emergency.setOnClickListener { _ ->
+                isEmergency = true
             }
-            inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
+            normal.setOnClickListener { _ ->
+                isEmergency = false
+            }
+            normal.performClick()
+
+            durationEdit.setOnFocusChangeListener { editText, hasFocus ->
+                if(hasFocus){
+                    datePicker()
+                }
+                inputMethodManager.hideSoftInputFromWindow(editText.windowToken, 0)
+            }
+
+            send.setOnClickListener { _ ->
+                val newRequest = NewBreakRequest(
+                    subject = subject.editText?.text.toString(),
+                    message = reason.editText?.text.toString(),
+                    emergency = isEmergency,
+                    from = duration.editText?.text.toString().slice(0..9),
+                    to = duration.editText?.text.toString().slice(13..22),
+                )
+                // Date value in edit field: 2023-08-17 - 2023-08-31
+                mockSubmit(newRequest)
+            }
         }
+    }
+
+    private fun mockSubmit(data: NewBreakRequest){
+        Log.d("new", "$data")
     }
 
     fun updateDateRange(range: Pair<Long, Long>?) {
