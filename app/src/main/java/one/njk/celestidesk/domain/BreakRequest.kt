@@ -1,5 +1,6 @@
 package one.njk.celestidesk.domain
 
+import android.util.Log
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -20,8 +21,8 @@ data class BreakRequest(
     // Target Format: "9 Day(s): 8 July to 17 July."
 
     private var totalDays = run {
-        var days = (to.date - from.date).days
-        if(days == 0) days = 1
+        var days = (to.date - from.date).days.toDouble()
+        if(days == 0.0) days = 1.0
         days
     }
 
@@ -34,12 +35,23 @@ data class BreakRequest(
         val currentMoment = Clock.System.now()
         val datetimeInUtc = currentMoment.toLocalDateTime(TimeZone.UTC)
 
-        var elapsed = (to.date - datetimeInUtc.date).days
-        if (elapsed <= 0)
-            elapsed = totalDays
+        var remaining = (to.date - datetimeInUtc.date).days.toDouble()
 
-        return (elapsed / totalDays) * 100
+        if (remaining < 0) remaining = 0.0
+        else if (remaining > totalDays) remaining = totalDays
+
+        Log.d("bar", "total: $totalDays, remaining: $remaining")
+        return ((remaining / totalDays) * 100).toInt()
     }
 
     // TODO: Replace these with calling string resources
 }
+/* Simulation area
+* Behaviour: as day come closer to the 'to' date, the bar reduces. otherwise, it starts with full
+* so,
+* [another yday -- yday]               today                [ tmrw -- another tmrw]
+*   x - x                               x                                                   = 0
+*   x               -                   x               -        x                          = .69
+*                                       x                        x - x                      = 1
+*
+* */
