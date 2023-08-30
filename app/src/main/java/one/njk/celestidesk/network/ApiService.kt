@@ -47,7 +47,7 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): NetworkTransactionsContainer
 
-    @GET("api/request/create")
+    @POST("api/request/create")
     suspend fun createNewRequest(
         @Header("Authorization") token: String,
         @Body request: NetworkNewRequest

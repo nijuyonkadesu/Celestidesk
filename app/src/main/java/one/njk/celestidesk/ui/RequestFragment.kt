@@ -79,17 +79,19 @@ class RequestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val calendarConstraints = CalendarConstraints.Builder()
-            .setStart(MaterialDatePicker.todayInUtcMilliseconds())
+//        val calendarConstraints = CalendarConstraints.Builder()
+//            .setStart(MaterialDatePicker.todayInUtcMilliseconds())
 
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select dates")
-                .setCalendarConstraints(calendarConstraints.build())
+//                .setCalendarConstraints(calendarConstraints.build())
                 .build()
 
-        val requestSheet = NewRequestSheet {
-            dateRangePicker.show(childFragmentManager, "DATE_PICK")
-        }
+        val requestSheet = NewRequestSheet(
+            { dateRangePicker.show(childFragmentManager, "DATE_PICK") },
+            { req ->
+                viewModel.newRequest(req)
+            })
 
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name
@@ -120,9 +122,6 @@ class RequestFragment : Fragment() {
                 }
 
                 /*
-                * TODO: override onCancel & onDismiss of model sheet (dialogue interface) to send save req
-                * https://github.com/material-components/material-components-android/blob/master/docs/components/BottomSheet.md
-                *
                 * TODO: add remaining request count near button
                 * TODO: disable clicking emergency request unless normal req exhausts
                 * */

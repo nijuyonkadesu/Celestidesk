@@ -41,4 +41,6 @@ suspend fun failsafeAuth(block: suspend () -> Unit): AuthResult<Unit> {
 *  - Show it as a snackbar (with try again button on failure)
 *  - don't allow dismissing bottom sheet while loading ...
 *  - ah, Show a indefinite linear progress bar at the bottom
+*  - Dismiss Bottom sheet after successful creation, and refresh the main screen
+*  - may include a swipe to refresh layout in main screen
 * */

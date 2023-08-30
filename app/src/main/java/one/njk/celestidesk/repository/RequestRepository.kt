@@ -14,6 +14,7 @@ import one.njk.celestidesk.domain.History
 import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
+import one.njk.celestidesk.network.NetworkNewRequest
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.network.asDatabaseModel
 import one.njk.celestidesk.utils.failsafe
@@ -75,6 +76,14 @@ class RequestRepository @Inject constructor(
             val transactions = api.getPastTransactions("Bearer ${token.token}")
             Log.d("network", transactions.toString())
             transactionDao.updateTransactions(transactions.asDatabaseModel())
+        }
+    }
+
+    suspend fun createNewRequest(req: NetworkNewRequest) {
+        failsafe {
+            Log.d("new", "$req")
+            val token = pref.getToken()
+            api.createNewRequest("Bearer ${token.token}", req)
         }
     }
 

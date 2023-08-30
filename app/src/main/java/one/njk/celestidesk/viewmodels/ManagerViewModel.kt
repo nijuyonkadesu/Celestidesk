@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import one.njk.celestidesk.domain.BreakRequest
+import one.njk.celestidesk.domain.NewBreakRequest
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.Stage
@@ -50,6 +51,10 @@ class ManagerViewModel @Inject constructor(val repository: RequestRepository): V
                 fireMail(decision, breakRequest)
             }
         }
+    }
+
+    override fun newRequest(req: NewBreakRequest) {
+        // Can't lol
     }
 
     private fun fireMail(decision: DecisionRequest, breakRequest: BreakRequest) {

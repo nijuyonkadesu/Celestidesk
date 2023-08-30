@@ -16,7 +16,7 @@ import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.databinding.NewRequestSheetBinding
 import one.njk.celestidesk.domain.NewBreakRequest
 
-class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
+class NewRequestSheet(val datePicker: () -> Unit, val submitRequest: (NewBreakRequest) -> Unit): BottomSheetDialogFragment() {
 
     private lateinit var _binding: NewRequestSheetBinding
 
@@ -63,13 +63,9 @@ class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
                     to = duration.editText?.text.toString().slice(13..22),
                 )
                 // Date value in edit field: 2023-08-17 - 2023-08-31
-                mockSubmit(newRequest)
+                submitRequest(newRequest)
             }
         }
-    }
-
-    private fun mockSubmit(data: NewBreakRequest){
-        Log.d("new", "$data")
     }
 
     fun updateDateRange(range: Pair<Long, Long>?) {
