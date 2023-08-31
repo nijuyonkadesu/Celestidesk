@@ -8,6 +8,10 @@ import kotlinx.datetime.minus
 import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.network.Stage
 
+/**
+ * Domain layer representation of Pending Requests [one.njk.celestidesk.network.NetworkPendingRequestContainer]
+ * in any one of the stage [one.njk.celestidesk.network.Stage]
+ * */
 data class BreakRequest(
     val name: String,
     val id: String,
