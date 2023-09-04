@@ -2,21 +2,24 @@ package one.njk.celestidesk.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.util.Pair
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.databinding.NewRequestSheetBinding
 import one.njk.celestidesk.domain.NewBreakRequest
+import one.njk.celestidesk.network.NetworkResult
 import one.njk.celestidesk.viewmodels.RequestViewModel
 
 @AndroidEntryPoint
@@ -80,7 +83,9 @@ class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
                     )
                     // Date value in edit field: 2023-08-17 - 2023-08-31
 
-                    viewModel.newRequest(req)
+                    lifecycleScope.launch {
+                        viewModel.newRequest(req)
+                    }
                 }
             }
 
@@ -91,6 +96,12 @@ class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
                 } else {
                     loading.visibility = View.INVISIBLE
                     send.visibility = View.VISIBLE
+                }
+
+                if(it.status is NetworkResult.Failed){
+                    Toast.makeText(requireContext(), "Please try again", Toast.LENGTH_SHORT).show()
+                } else {
+                    // TODO: Close the bottom sheet
                 }
             }
         }

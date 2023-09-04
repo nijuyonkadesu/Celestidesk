@@ -3,6 +3,7 @@ package one.njk.celestidesk.utils
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import one.njk.celestidesk.network.NetworkResult
 import one.njk.celestidesk.network.auth.model.AuthResult
 import retrofit2.HttpException
 
@@ -15,6 +16,26 @@ suspend fun failsafe(block: suspend () -> Unit) {
 
         } catch (e: Exception){
             Log.d("network", "fatal: ${e.message}")
+        }
+    }
+}
+
+/**
+ * regular failsafe, but returns a message. I honestly don't know what to name it kek
+ */
+suspend fun feedbackFailsafe(block: suspend () -> Unit): NetworkResult<Unit> {
+    return withContext(Dispatchers.IO) {
+        try {
+            block()
+            NetworkResult.Success()
+
+        } catch (e: HttpException) {
+            Log.d("network", "${e.message}")
+            NetworkResult.Failed()
+
+        } catch (e: Exception) {
+            NetworkResult.Failed()
+
         }
     }
 }
