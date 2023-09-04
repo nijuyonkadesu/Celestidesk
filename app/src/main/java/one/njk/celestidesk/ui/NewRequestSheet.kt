@@ -55,17 +55,45 @@ class NewRequestSheet(val datePicker: () -> Unit, val submitRequest: (NewBreakRe
             }
 
             send.setOnClickListener { _ ->
-                val newRequest = NewBreakRequest(
-                    subject = subject.editText?.text.toString(),
-                    message = reason.editText?.text.toString(),
-                    emergency = isEmergency,
-                    from = duration.editText?.text.toString().slice(0..9),
-                    to = duration.editText?.text.toString().slice(13..22),
-                )
-                // Date value in edit field: 2023-08-17 - 2023-08-31
-                submitRequest(newRequest)
+
+                val subjectInput = subject.editText?.text.toString().trim()
+                val reasonInput = reason.editText?.text.toString().trim()
+                val durationInput = duration.editText?.text.toString().trim()
+
+                // Error texts
+                subject.error = validateSubject(subjectInput)
+                reason.error = validateReason(reasonInput)
+                duration.error = validateDuration(durationInput)
+
+                if(subject.error == null && reason.error == null && duration.error == null){
+                    val newRequest = NewBreakRequest(
+                        subject = subjectInput,
+                        message = reasonInput,
+                        emergency = isEmergency,
+                        from = durationInput.slice(0..9),
+                        to = durationInput.slice(13..22),
+                    )
+                    // Date value in edit field: 2023-08-17 - 2023-08-31
+
+                    submitRequest(newRequest)
+                }
             }
         }
+    }
+    // TODO: Linear Progress bar, and hide send button until a response is received
+    // TODO: Close Bottom Sheet on success
+    // TODO: A Toast showing error? || A Snackbar with retry option when sending is failed
+    private fun validateSubject(subject: String): String? {
+        if(subject.isEmpty()) return "Subject is empty!"
+        return null
+    }
+    private fun validateReason(subject: String): String? {
+        if(subject.isEmpty()) return "Give a brief explanation"
+        return null
+    }
+    private fun validateDuration(subject: String): String? {
+        if(subject.isEmpty() || subject.length < 22) return "Please choose the dates again"
+        return null
     }
 
     fun updateDateRange(range: Pair<Long, Long>?) {
