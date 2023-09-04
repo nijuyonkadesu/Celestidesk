@@ -18,7 +18,6 @@ import one.njk.celestidesk.network.NetworkNewRequest
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.network.asDatabaseModel
 import one.njk.celestidesk.utils.failsafe
-import one.njk.celestidesk.utils.sendEmail
 import javax.inject.Inject
 
 class RequestRepository @Inject constructor(
@@ -53,7 +52,7 @@ class RequestRepository @Inject constructor(
         it.asDomainModel()
     }
 
-    fun getTransactionsFlow() = transactionDao.getTransactionsFlow().flowOn(Dispatchers.Default).map {
+    private fun getTransactionsFlow() = transactionDao.getTransactionsFlow().flowOn(Dispatchers.Default).map {
         it.asHistoryDomainModel()
     }
 

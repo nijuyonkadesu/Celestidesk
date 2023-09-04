@@ -53,7 +53,16 @@ class AuthViewModel @Inject constructor(
             it.copy(isLoading = false, authResult = result)
         }
     }
-    // TODO: Validators for LogIn too & check if coroutines are used properly here
+
+    fun validateUsername(username: String): String? {
+        if(username.isEmpty()) return "Do not leave username empty!"
+        return null
+    }
+
+    fun validatePassword(password: String): String? {
+        if(password.isEmpty()) return "Please type the password!"
+        return null
+    }
 
     suspend fun authenticate(){
         uiState.update {

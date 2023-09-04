@@ -38,7 +38,6 @@ interface TransactionDao {
     fun searchTransactions(term: String): Flow<List<DatabaseTransaction>>
 }
 
-// TODO: Use FTS4 once transaction things is implemented
 @Database(entities = [DatabasePendingRequest::class, DatabaseTransaction::class, FtsTransaction::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RequestDatabase: RoomDatabase() {
