@@ -15,7 +15,6 @@ interface RoleAgreement {
     fun updateStage(stage: Stage)
     fun refreshRequests()
     fun decide(decision: DecisionRequest, breakRequest: BreakRequest)
-    fun newRequest(req: NewBreakRequest)
 }
 
 data class RoleUiState(

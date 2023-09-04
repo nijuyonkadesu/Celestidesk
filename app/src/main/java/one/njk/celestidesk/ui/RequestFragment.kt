@@ -87,11 +87,9 @@ class RequestFragment : Fragment() {
 //                .setCalendarConstraints(calendarConstraints.build())
                 .build()
 
-        val requestSheet = NewRequestSheet(
-            { dateRangePicker.show(childFragmentManager, "DATE_PICK") },
-            { req ->
-                viewModel.newRequest(req)
-            })
+        val requestSheet = NewRequestSheet {
+            dateRangePicker.show(childFragmentManager, "DATE_PICK")
+        }
 
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name

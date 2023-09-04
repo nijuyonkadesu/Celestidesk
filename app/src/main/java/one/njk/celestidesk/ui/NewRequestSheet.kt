@@ -8,17 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.util.Pair
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.MaterialDatePicker
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import one.njk.celestidesk.databinding.NewRequestSheetBinding
 import one.njk.celestidesk.domain.NewBreakRequest
+import one.njk.celestidesk.viewmodels.RequestViewModel
 
-class NewRequestSheet(val datePicker: () -> Unit, val submitRequest: (NewBreakRequest) -> Unit): BottomSheetDialogFragment() {
+@AndroidEntryPoint
+class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
 
     private lateinit var _binding: NewRequestSheetBinding
+    private val viewModel: RequestViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,7 +71,7 @@ class NewRequestSheet(val datePicker: () -> Unit, val submitRequest: (NewBreakRe
                 duration.error = validateDuration(durationInput)
 
                 if(subject.error == null && reason.error == null && duration.error == null){
-                    val newRequest = NewBreakRequest(
+                    val req = NewBreakRequest(
                         subject = subjectInput,
                         message = reasonInput,
                         emergency = isEmergency,
@@ -75,7 +80,17 @@ class NewRequestSheet(val datePicker: () -> Unit, val submitRequest: (NewBreakRe
                     )
                     // Date value in edit field: 2023-08-17 - 2023-08-31
 
-                    submitRequest(newRequest)
+                    viewModel.newRequest(req)
+                }
+            }
+
+            viewModel.state.observe(viewLifecycleOwner){
+                if(it.isLoading) {
+                    loading.visibility = View.VISIBLE
+                    send.visibility = View.GONE
+                } else {
+                    loading.visibility = View.INVISIBLE
+                    send.visibility = View.VISIBLE
                 }
             }
         }
