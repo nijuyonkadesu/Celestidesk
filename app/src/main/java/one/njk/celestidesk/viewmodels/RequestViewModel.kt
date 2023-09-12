@@ -29,7 +29,7 @@ class RequestViewModel @Inject constructor(
     }.asLiveData()
     suspend fun newRequest(req: NewBreakRequest) {
         uiState.update {
-            it.copy(isLoading = true, status = NetworkResult.Failed())
+            it.copy(isLoading = true, status = NetworkResult.ItsOk())
         }
         val status = repository.createNewRequest(req.asNetworkModel())
         uiState.update {
@@ -38,6 +38,6 @@ class RequestViewModel @Inject constructor(
     }
     data class UiState(
         val isLoading: Boolean = false,
-        val status: NetworkResult<Unit> = NetworkResult.Failed()
+        val status: NetworkResult<Unit> = NetworkResult.ItsOk()
     )
 }

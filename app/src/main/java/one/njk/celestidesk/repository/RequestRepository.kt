@@ -15,9 +15,11 @@ import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.NetworkNewRequest
+import one.njk.celestidesk.network.NetworkResult
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.network.asDatabaseModel
 import one.njk.celestidesk.utils.failsafe
+import one.njk.celestidesk.utils.feedbackFailsafe
 import javax.inject.Inject
 
 class RequestRepository @Inject constructor(
@@ -84,8 +86,8 @@ class RequestRepository @Inject constructor(
         }
     }
 
-    suspend fun createNewRequest(req: NetworkNewRequest) {
-        failsafe {
+    suspend fun createNewRequest(req: NetworkNewRequest): NetworkResult<Unit> {
+        return feedbackFailsafe {
             Log.d("new", "$req")
             val token = pref.getToken()
             api.createNewRequest("Bearer ${token.token}", req)

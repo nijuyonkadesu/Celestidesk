@@ -100,8 +100,9 @@ class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
 
                 if(it.status is NetworkResult.Failed){
                     Toast.makeText(requireContext(), "Please try again", Toast.LENGTH_SHORT).show()
-                } else {
-                    // TODO: Close the bottom sheet
+                } else if (it.status is NetworkResult.Success) {
+                    this@NewRequestSheet.dismiss()
+                    Toast.makeText(requireContext(), "Request successfully raised", Toast.LENGTH_SHORT).show()
                 }
             }
         }

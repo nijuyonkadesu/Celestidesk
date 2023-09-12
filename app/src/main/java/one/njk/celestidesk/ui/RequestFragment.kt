@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -162,7 +161,6 @@ class RequestFragment : Fragment() {
             isSingleSelection = true
         }
 
-        // Generate Chip based on chosen Category (SFW/NSFW)
         for(category in categories){
             val chip = Chip(this.context)
             chip.apply {
