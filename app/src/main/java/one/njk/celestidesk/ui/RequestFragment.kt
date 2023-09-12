@@ -126,6 +126,12 @@ class RequestFragment : Fragment() {
                 * */
             }
         }
+        binding.refresh.apply {
+            setOnRefreshListener {
+                viewModel.refreshRequests()
+                isRefreshing = false
+            }
+        }
 
     }
 
