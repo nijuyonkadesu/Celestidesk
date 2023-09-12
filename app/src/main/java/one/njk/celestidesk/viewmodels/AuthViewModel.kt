@@ -34,7 +34,7 @@ class AuthViewModel @Inject constructor(
     private suspend fun signUp(req: AuthSignUpRequest) {
 
         uiState.update {
-            it.copy(isLoading = true)
+            it.copy(isLoading = true, authResult = AuthResult.ItsOk())
         }
         val result = api.signUp(req)
         uiState.update {
@@ -44,7 +44,7 @@ class AuthViewModel @Inject constructor(
 
     suspend fun logIn(username: String, password: String){
         uiState.update {
-            it.copy(isLoading = true)
+            it.copy(isLoading = true, authResult = AuthResult.ItsOk())
         }
         val result = api.logIn(
             AuthLoginRequest(username, password)
@@ -66,7 +66,7 @@ class AuthViewModel @Inject constructor(
 
     suspend fun authenticate(){
         uiState.update {
-            it.copy(isLoading = true)
+            it.copy(isLoading = true, authResult = AuthResult.ItsOk())
         }
         val result = api.authenticate()
         uiState.update {

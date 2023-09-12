@@ -63,7 +63,7 @@ class LoginFragment: Fragment() {
                 if(it.authResult is AuthResult.Authorized) {
                     findNavController().navigate(
                         LoginFragmentDirections.actionLoginFragmentToRequestFragment())
-                } else {
+                } else if(it.authResult !is AuthResult.ItsOk) {
                     Toast.makeText(context, "Please login again", Toast.LENGTH_SHORT).show()
                 }
             }
