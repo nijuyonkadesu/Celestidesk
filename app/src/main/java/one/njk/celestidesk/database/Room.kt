@@ -36,6 +36,9 @@ interface TransactionDao {
 
     @Query("select * from FtsTransaction where FtsTransaction match :term")
     fun searchTransactions(term: String): Flow<List<DatabaseTransaction>>
+
+    @Query("delete from DatabaseTransaction")
+    fun invalidateCache()
 }
 
 @Database(entities = [DatabasePendingRequest::class, DatabaseTransaction::class, FtsTransaction::class], version = 2, exportSchema = false)
