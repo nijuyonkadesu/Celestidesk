@@ -64,10 +64,11 @@
 
     <!-- Compares today's date, and 'to' date to show if the request is expired or not -->
         <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/elapsed_days"
             android:paddingStart="48dp"
             android:paddingEnd="8dp"
-            android:id="@+id/elapsed_days"
             android:paddingHorizontal="2dp"
+            app:trackCornerRadius="@dimen/cardview_default_radius"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:max="100"
