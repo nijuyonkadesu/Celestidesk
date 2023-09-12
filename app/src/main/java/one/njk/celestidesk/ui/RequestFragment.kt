@@ -12,6 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,12 +80,12 @@ class RequestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val calendarConstraints = CalendarConstraints.Builder()
-//            .setStart(MaterialDatePicker.todayInUtcMilliseconds())
+        val calendarConstraints = CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointForward.now())
 
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select dates")
-//                .setCalendarConstraints(calendarConstraints.build())
+                .setCalendarConstraints(calendarConstraints.build())
                 .build()
 
         val requestSheet = NewRequestSheet {
