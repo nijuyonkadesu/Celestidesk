@@ -68,8 +68,8 @@ class RequestRepository @Inject constructor(
             getTransactionsFlow()
     }
 
-    suspend fun makeDecision(decision: DecisionRequest) {
-        failsafe {
+    suspend fun makeDecision(decision: DecisionRequest): NetworkResult<Unit> {
+        return feedbackFailsafe {
             val token = pref.getToken()
             val message = api.makeDecision("Bearer ${token.token}", decision)
             Log.d("network", message.message)

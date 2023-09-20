@@ -110,6 +110,14 @@ class RequestFragment : Fragment() {
             adapter.submitList(it)
         }
 
+        viewModel.state.observe(viewLifecycleOwner) {
+            if(it.isLoading) {
+                binding.loading.visibility = View.VISIBLE
+            } else {
+                binding.loading.visibility = View.INVISIBLE
+            }
+        }
+
         binding.fab.setOnClickListener {
             if(currentRole != Role.EMPLOYEE)
                 findNavController()

@@ -8,10 +8,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
+import one.njk.celestidesk.network.NetworkResult
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.repository.RequestRepository
 import javax.inject.Inject
@@ -28,6 +32,10 @@ class ManagerViewModel @Inject constructor(val repository: RequestRepository): V
     }
 
     override val uiState = MutableStateFlow(RoleUiState(Stage.IN_PROCESS))
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val state = uiState.flatMapLatest {
+        flowOf(it).flowOn(Dispatchers.IO)
+    }.asLiveData()
     override fun updateStage(stage: Stage){
         uiState.value = uiState.value.copy(
             stage = stage
@@ -44,10 +52,16 @@ class ManagerViewModel @Inject constructor(val repository: RequestRepository): V
     }.asLiveData()
 
     override fun decide(decision: DecisionRequest, breakRequest: BreakRequest) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.makeDecision(decision)
+        viewModelScope.launch {
+            uiState.update {
+                it.copy(isLoading = true, status = NetworkResult.ItsOk())
+            }
+            val status = repository.makeDecision(decision)
             if(decision.decision == Decision.ACCEPTED) {
                 fireMail(decision, breakRequest)
+            }
+            uiState.update {
+                it.copy(isLoading = false, status = status)
             }
         }
     }

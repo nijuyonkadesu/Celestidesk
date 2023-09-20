@@ -5,12 +5,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.DecisionRequest
+import one.njk.celestidesk.network.NetworkResult
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.repository.RequestRepository
 import javax.inject.Inject
@@ -27,6 +32,11 @@ class TeamLeadViewModel @Inject constructor(val repository: RequestRepository): 
     }
 
     override val uiState = MutableStateFlow(RoleUiState(Stage.IN_PROCESS))
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val state = uiState.flatMapLatest {
+        flowOf(it).flowOn(Dispatchers.IO)
+    }.asLiveData()
     override fun updateStage(stage: Stage){
         Log.d("stage", "$stage")
         uiState.value = uiState.value.copy(
@@ -45,7 +55,13 @@ class TeamLeadViewModel @Inject constructor(val repository: RequestRepository): 
 
     override fun decide(decision: DecisionRequest, breakRequest: BreakRequest) {
         viewModelScope.launch {
-            repository.makeDecision(decision)
+            uiState.update {
+                it.copy(isLoading = true, status = NetworkResult.ItsOk())
+            }
+            val status = repository.makeDecision(decision)
+            uiState.update {
+                it.copy(isLoading = false, status = status)
+            }
         }
     }
 }

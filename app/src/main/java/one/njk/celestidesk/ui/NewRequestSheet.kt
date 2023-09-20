@@ -99,7 +99,7 @@ class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
                 }
 
                 if(it.status is NetworkResult.Failed){
-                    Toast.makeText(requireContext(), "Please try again", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Please try again (or) You've used up all 5 requests this month! ", Toast.LENGTH_LONG).show()
                 } else if (it.status is NetworkResult.Success) {
                     this@NewRequestSheet.dismiss()
                     Toast.makeText(requireContext(), "Request successfully raised", Toast.LENGTH_SHORT).show()
@@ -107,9 +107,6 @@ class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
             }
         }
     }
-    // TODO: Linear Progress bar, and hide send button until a response is received
-    // TODO: Close Bottom Sheet on success
-    // TODO: A Toast showing error? || A Snackbar with retry option when sending is failed
     private fun validateSubject(subject: String): String? {
         if(subject.isEmpty()) return "Subject is empty!"
         return null

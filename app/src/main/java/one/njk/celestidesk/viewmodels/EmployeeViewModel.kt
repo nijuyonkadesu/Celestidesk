@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.DecisionRequest
@@ -27,6 +30,10 @@ class EmployeeViewModel @Inject constructor(val repository: RequestRepository): 
     }
 
     override val uiState = MutableStateFlow(RoleUiState(Stage.IN_PROCESS))
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val state = uiState.flatMapLatest {
+        flowOf(it).flowOn(Dispatchers.IO)
+    }.asLiveData()
     override fun updateStage(stage: Stage){
         uiState.value = uiState.value.copy(
             stage = stage
