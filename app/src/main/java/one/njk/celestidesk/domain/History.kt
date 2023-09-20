@@ -5,6 +5,9 @@ import kotlinx.datetime.minus
 import one.njk.celestidesk.network.ActionResult
 import one.njk.celestidesk.network.Stage
 
+/**
+ * Domain layer representation of Transactions [one.njk.celestidesk.network.NetworkTransactionsContainer]
+ * */
 data class History (
     val origin: String,
     val subject: String,

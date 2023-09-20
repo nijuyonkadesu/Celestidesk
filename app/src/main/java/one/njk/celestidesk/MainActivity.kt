@@ -1,6 +1,7 @@
 package one.njk.celestidesk
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import one.njk.celestidesk.database.RequestsDao
 import one.njk.celestidesk.database.RolesDataStore
+import one.njk.celestidesk.database.TransactionDao
 import one.njk.celestidesk.databinding.ActivityMainBinding
 import one.njk.celestidesk.ui.RequestFragmentDirections
 import javax.inject.Inject
@@ -26,6 +29,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     @Inject
     lateinit var pref: RolesDataStore
+    @Inject
+    lateinit var requestsDao: RequestsDao
+    @Inject
+    lateinit var transactionDao: TransactionDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -42,12 +49,6 @@ class MainActivity : AppCompatActivity() {
         // Top level Navigation destination do not have <- icon
         appBarConfiguration = AppBarConfiguration(setOf(R.id.startFragment, R.id.requestFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-//        binding.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAnchorView(R.id.fab)
-//                .setAction("Action", null).show()
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -68,14 +69,24 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+    /**
+     * Directs the user to first screen, and formats datastore & ROOM db
+     * */
     private fun logout() {
-        CoroutineScope(Dispatchers.IO).launch {
-            pref.format()
+        try {
+            val navHostFragment = supportFragmentManager
+                .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+            val navController = navHostFragment.navController
+            navController.navigate(RequestFragmentDirections.actionRequestFragmentToStartFragment())
+
+            CoroutineScope(Dispatchers.IO).launch {
+                pref.format()
+                transactionDao.invalidateCache()
+                requestsDao.invalidateCache()
+            }
+        } catch (e: Exception){
+            Log.d("oopsie", "oopsie!")
         }
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
-        val navController = navHostFragment.navController
-        navController.navigate(RequestFragmentDirections.actionRequestFragmentToStartFragment())
     }
 
     override fun onSupportNavigateUp(): Boolean {

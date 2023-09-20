@@ -23,8 +23,8 @@ import one.njk.celestidesk.viewmodels.AuthViewModel
 
 @AndroidEntryPoint
 class LoginFragment: Fragment() {
-    lateinit var binding: FragmentLoginBinding
-    val viewModel: AuthViewModel by viewModels()
+    private lateinit var binding: FragmentLoginBinding
+    private val viewModel: AuthViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,11 +41,14 @@ class LoginFragment: Fragment() {
         binding.apply {
             submit.setOnClickListener {
                 lifecycleScope.launch {
-                    val inputUsername = username.editText?.text.toString()
-                    val inputPassword = password.editText?.text.toString()
-                    if(inputPassword.isNotEmpty() && inputUsername.isNotEmpty()){
+                    val inputUsername = username.editText?.text.toString().trim()
+                    val inputPassword = password.editText?.text.toString().trim()
+
+                    username.error = viewModel.validateUsername(inputUsername)
+                    password.error = viewModel.validatePassword(inputPassword)
+
+                    if(username.error == null && password.error == null){
                         viewModel.logIn(inputUsername, inputPassword)
-                        // TODO: Do validation inside viewmodel
                     }
                 }
             }
@@ -60,10 +63,9 @@ class LoginFragment: Fragment() {
                 if(it.authResult is AuthResult.Authorized) {
                     findNavController().navigate(
                         LoginFragmentDirections.actionLoginFragmentToRequestFragment())
-                } else {
-                    Toast.makeText(context, "verify your username / password", Toast.LENGTH_SHORT).show()
+                } else if(it.authResult !is AuthResult.ItsOk) {
+                    Toast.makeText(context, "Please login again", Toast.LENGTH_SHORT).show()
                 }
-                // TODO: wrap this inside a fun that takes a block { }
             }
             submit.setOnEditorActionListener { view, event, _ ->
                 if(event == EditorInfo.IME_ACTION_NEXT){
@@ -77,17 +79,10 @@ class LoginFragment: Fragment() {
 
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                    viewModel.logIn("radextrem", "123456")
-//                    delay(7000)
                     viewModel.authenticate()
-                    // Wait for network inspector to launch
                 }
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
     private fun handleKeyEvent(view: View, keyCode: Int): Boolean {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,19 +80,17 @@ class RequestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val calendarConstraints = CalendarConstraints.Builder()
-//            .setStart(MaterialDatePicker.todayInUtcMilliseconds())
+        val calendarConstraints = CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointForward.now())
 
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select dates")
-//                .setCalendarConstraints(calendarConstraints.build())
+                .setCalendarConstraints(calendarConstraints.build())
                 .build()
 
-        val requestSheet = NewRequestSheet(
-            { dateRangePicker.show(childFragmentManager, "DATE_PICK") },
-            { req ->
-                viewModel.newRequest(req)
-            })
+        val requestSheet = NewRequestSheet {
+            dateRangePicker.show(childFragmentManager, "DATE_PICK")
+        }
 
         lifecycleScope.launch {
             _binding!!.role.text = viewModel.name
@@ -111,6 +110,14 @@ class RequestFragment : Fragment() {
             adapter.submitList(it)
         }
 
+        viewModel.state.observe(viewLifecycleOwner) {
+            if(it.isLoading) {
+                binding.loading.visibility = View.VISIBLE
+            } else {
+                binding.loading.visibility = View.INVISIBLE
+            }
+        }
+
         binding.fab.setOnClickListener {
             if(currentRole != Role.EMPLOYEE)
                 findNavController()
@@ -125,6 +132,12 @@ class RequestFragment : Fragment() {
                 * TODO: add remaining request count near button
                 * TODO: disable clicking emergency request unless normal req exhausts
                 * */
+            }
+        }
+        binding.refresh.apply {
+            setOnRefreshListener {
+                viewModel.refreshRequests()
+                isRefreshing = false
             }
         }
 
@@ -164,7 +177,6 @@ class RequestFragment : Fragment() {
             isSingleSelection = true
         }
 
-        // Generate Chip based on chosen Category (SFW/NSFW)
         for(category in categories){
             val chip = Chip(this.context)
             chip.apply {

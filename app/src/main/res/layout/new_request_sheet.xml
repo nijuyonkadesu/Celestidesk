@@ -22,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="16dp">
+            android:paddingTop="16dp">
 
             <TextView
                 android:layout_margin="4dp"
@@ -79,10 +79,12 @@
                 style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
                 android:hint="@string/hint_subject"
                 app:layout_constraintTop_toBottomOf="@id/toggle"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginVertical="8dp"
 
                 app:startIconDrawable="@drawable/convo">
 
@@ -104,8 +106,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/subject"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toStartOf="parent"
-                android:layout_marginVertical="8dp"
 
                 android:hint="@string/hint_reason"
                 app:startIconDrawable="@drawable/chat">
@@ -126,9 +129,10 @@
                 style="@style/ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/reason"
                 app:layout_constraintEnd_toStartOf="parent"
-                android:layout_marginVertical="8dp"
 
                 android:hint="@string/hint_duration"
                 app:startIconDrawable="@drawable/date_range">
@@ -147,11 +151,23 @@
                 android:id="@+id/send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="12dp"
+                android:layout_margin="12dp"
                 android:text="Send"
                 app:icon="@drawable/send"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/subject"
                 app:layout_constraintTop_toBottomOf="@id/duration" />
+
+            <!-- Progress Bar -->
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/send"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

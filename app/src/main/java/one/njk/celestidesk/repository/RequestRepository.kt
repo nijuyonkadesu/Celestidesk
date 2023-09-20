@@ -15,10 +15,11 @@ import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.NetworkNewRequest
+import one.njk.celestidesk.network.NetworkResult
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.network.asDatabaseModel
 import one.njk.celestidesk.utils.failsafe
-import one.njk.celestidesk.utils.sendEmail
+import one.njk.celestidesk.utils.feedbackFailsafe
 import javax.inject.Inject
 
 class RequestRepository @Inject constructor(
@@ -37,17 +38,23 @@ class RequestRepository @Inject constructor(
         }
     }
 
-    // Requests in ACCEPTED or REJECTED
+    /**
+     * Requests in ACCEPTED or REJECTED stages
+     * */
     fun getRequestsFlow(stage: Stage) = requestsDao.getRequestsFlow(stage).flowOn(Dispatchers.Default).map {
+        Log.d("network", "For Employee to see $it")
         it.asDomainModel()
     }
 
-    // Requests in IN_REVIEW + IN_PROCESS
+    /**
+     * Requests in IN_REVIEW and IN_PROCESS stages
+     * */
     fun getPendingRequestsFlow() = requestsDao.getPendingRequestsFlow().flowOn(Dispatchers.Default).map {
+        Log.d("network", "Waiting for Approval $it")
         it.asDomainModel()
     }
 
-    fun getTransactionsFlow() = transactionDao.getTransactionsFlow().flowOn(Dispatchers.Default).map {
+    private fun getTransactionsFlow() = transactionDao.getTransactionsFlow().flowOn(Dispatchers.Default).map {
         it.asHistoryDomainModel()
     }
 
@@ -61,8 +68,8 @@ class RequestRepository @Inject constructor(
             getTransactionsFlow()
     }
 
-    suspend fun makeDecision(decision: DecisionRequest) {
-        failsafe {
+    suspend fun makeDecision(decision: DecisionRequest): NetworkResult<Unit> {
+        return feedbackFailsafe {
             val token = pref.getToken()
             val message = api.makeDecision("Bearer ${token.token}", decision)
             Log.d("network", message.message)
@@ -79,8 +86,8 @@ class RequestRepository @Inject constructor(
         }
     }
 
-    suspend fun createNewRequest(req: NetworkNewRequest) {
-        failsafe {
+    suspend fun createNewRequest(req: NetworkNewRequest): NetworkResult<Unit> {
+        return feedbackFailsafe {
             Log.d("new", "$req")
             val token = pref.getToken()
             api.createNewRequest("Bearer ${token.token}", req)
