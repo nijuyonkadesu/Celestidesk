@@ -28,6 +28,7 @@ import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.toStage
+import one.njk.celestidesk.viewmodels.CrisisManagerViewModel
 import one.njk.celestidesk.viewmodels.EmployeeViewModel
 import one.njk.celestidesk.viewmodels.ManagerViewModel
 import one.njk.celestidesk.viewmodels.RoleAgreement
@@ -161,6 +162,10 @@ class RequestFragment : Fragment() {
             Role.MANAGER -> {
                 val managerLeadViewModel: ManagerViewModel by activityViewModels()
                 managerLeadViewModel
+            }
+            Role.EMERGENCY -> {
+                val crisisManagerViewModel: CrisisManagerViewModel by activityViewModels()
+                crisisManagerViewModel
             }
         }
     }
