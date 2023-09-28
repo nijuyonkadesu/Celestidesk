@@ -14,7 +14,7 @@ import one.njk.celestidesk.domain.History
 import one.njk.celestidesk.network.ApiService
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
-import one.njk.celestidesk.network.NetworkNewRequest
+import one.njk.celestidesk.network.NetworkNewBreakRequest
 import one.njk.celestidesk.network.NetworkResult
 import one.njk.celestidesk.network.Stage
 import one.njk.celestidesk.network.asDatabaseModel
@@ -39,7 +39,7 @@ class RequestRepository @Inject constructor(
     }
 
     /**
-     * Requests in ACCEPTED or REJECTED stages
+     * Requests in ACCEPTED or REJECTED [Stage]
      * */
     fun getRequestsFlow(stage: Stage) = requestsDao.getRequestsFlow(stage).flowOn(Dispatchers.Default).map {
         Log.d("network", "For Employee to see $it")
@@ -47,7 +47,7 @@ class RequestRepository @Inject constructor(
     }
 
     /**
-     * Requests in IN_REVIEW and IN_PROCESS stages
+     * Requests in IN_REVIEW and IN_PROCESS [Stage]. I call this as 'PENDING'. Refer viewmodels to understand
      * */
     fun getPendingRequestsFlow() = requestsDao.getPendingRequestsFlow().flowOn(Dispatchers.Default).map {
         Log.d("network", "Waiting for Approval $it")
@@ -86,7 +86,7 @@ class RequestRepository @Inject constructor(
         }
     }
 
-    suspend fun createNewRequest(req: NetworkNewRequest): NetworkResult<Unit> {
+    suspend fun createNewRequest(req: NetworkNewBreakRequest): NetworkResult<Unit> {
         return feedbackFailsafe {
             Log.d("new", "$req")
             val token = pref.getToken()
@@ -95,7 +95,7 @@ class RequestRepository @Inject constructor(
     }
 
     fun sendMailFromRequest(subject: String, body: String, decision: Decision) {
-        sendEmail(subject, "Your request `$body` got $decision by MANAGER")
+//        sendEmail(subject, "Your request `$body` got $decision by MANAGER")
     }
     // TODO: Make it more dynamic and sensible - Replace with SMS
 }

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -34,11 +35,6 @@ import one.njk.celestidesk.viewmodels.ManagerViewModel
 import one.njk.celestidesk.viewmodels.RoleAgreement
 import one.njk.celestidesk.viewmodels.TeamLeadViewModel
 import javax.inject.Inject
-
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
-
 
 @AndroidEntryPoint
 class RequestFragment : Fragment() {
@@ -98,13 +94,15 @@ class RequestFragment : Fragment() {
             _binding!!.fab.setIconResource(fabIcon)
             _binding!!.fab.text = getString(fabHint)
         }
+
         addFilterChips(binding.filter, viewModel.stages, lifecycleScope)
-        val adapter = RequestListAdapter {
+
+        val adapter = RequestListAdapter ({
             lifecycleScope.launch {
                 if(currentRole != Role.EMPLOYEE)
                     showConfirmationDialog(it)
             }
-        }
+        }, { AppCompatResources.getDrawable(requireContext(), R.drawable.striking_text)!! })
         binding.requestList.adapter = adapter
 
         viewModel.requestsFlow.observe(viewLifecycleOwner) {

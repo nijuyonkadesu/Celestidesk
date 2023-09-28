@@ -1,6 +1,6 @@
 package one.njk.celestidesk.domain
 
-import one.njk.celestidesk.network.NetworkNewRequest
+import one.njk.celestidesk.network.NetworkNewBreakRequest
 
 data class NewBreakRequest(
     val subject: String,
@@ -10,8 +10,8 @@ data class NewBreakRequest(
     val to: String,
 )
 
-fun NewBreakRequest.asNetworkModel(): NetworkNewRequest {
-    return NetworkNewRequest(
+fun NewBreakRequest.asNetworkModel(): NetworkNewBreakRequest {
+    return NetworkNewBreakRequest(
         this.subject,
         this.message,
         this.emergency,

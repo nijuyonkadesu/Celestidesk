@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
-import one.njk.celestidesk.network.auth.model.TokenResponse
+import one.njk.celestidesk.network.auth.model.AuthResponse
 
 enum class Role {
     EMPLOYEE, TEAM_LEAD, MANAGER, EMERGENCY
@@ -32,9 +32,9 @@ class RolesDataStore(private val context: Context) {
         return role?.let { Role.valueOf(it) } ?: Role.EMPLOYEE
     }
 
-    suspend fun getToken(): TokenResponse {
+    suspend fun getToken(): AuthResponse {
         val role = context.rolesDataStore.data.first()[ROLE] ?: Role.EMPLOYEE.toString()
-        return TokenResponse(
+        return AuthResponse(
             "local copy",
             context.rolesDataStore.data.first()[TOKEN] ?: "",
             Role.valueOf(role)
@@ -42,11 +42,11 @@ class RolesDataStore(private val context: Context) {
     }
 
     // TODO: Refactor TokenResponse name
-    suspend fun setToken(tokenResponse: TokenResponse) {
-        Log.d("pref", "saved: ${tokenResponse.role}")
-        setRole(tokenResponse.role)
+    suspend fun setToken(authResponse: AuthResponse) {
+        Log.d("pref", "saved: ${authResponse.role}")
+        setRole(authResponse.role)
         context.rolesDataStore.edit {
-            it[TOKEN] = tokenResponse.token
+            it[TOKEN] = authResponse.token
         }
     }
 

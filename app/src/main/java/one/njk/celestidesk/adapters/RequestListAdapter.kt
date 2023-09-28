@@ -1,18 +1,20 @@
 package one.njk.celestidesk.adapters
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.databinding.RequestItemBinding
+import one.njk.celestidesk.domain.BreakRequest
 
 class RequestListAdapter(
     private val exposeRequest: (BreakRequest) -> Unit,
+    private val strikeMe: () -> Drawable
 ): ListAdapter<BreakRequest, RequestListAdapter.ItemViewHolder>(DiffCallback) {
 
-    class ItemViewHolder(private val binding: RequestItemBinding):
+    class ItemViewHolder(private val binding: RequestItemBinding, private val strikeMe: () -> Drawable):
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(req: BreakRequest){
@@ -22,6 +24,11 @@ class RequestListAdapter(
                 name.text = req.name
                 time.text = req.dateShort
                 elapsedDays.progress = req.getProgress()
+                if(elapsedDays.progress == 0) {
+                    reasonSubject.foreground = strikeMe()
+                    reason.foreground = strikeMe()
+                    name.foreground = strikeMe()
+                }
             }
         }
     }
@@ -36,7 +43,7 @@ class RequestListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = RequestItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(view)
+        return ItemViewHolder(view, strikeMe)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

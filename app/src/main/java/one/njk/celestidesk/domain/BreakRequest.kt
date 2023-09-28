@@ -10,7 +10,7 @@ import one.njk.celestidesk.network.Stage
 
 /**
  * Domain layer representation of Pending Requests [one.njk.celestidesk.network.NetworkPendingRequestContainer]
- * in any one of the stage [one.njk.celestidesk.network.Stage]
+ * in any one of [Stage]
  * */
 data class BreakRequest(
     val name: String,
