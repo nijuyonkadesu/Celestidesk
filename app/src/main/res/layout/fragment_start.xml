@@ -3,41 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/introEmployee"
-        style="@style/TextAppearance.Material3.DisplaySmall"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textFontWeight="600"
-        app:layout_constraintBottom_toTopOf="@+id/introLead"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Student Break" />
-
-    <TextView
-        android:id="@+id/introLead"
-        style="@style/TextAppearance.Material3.DisplaySmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textFontWeight="600"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp"
-        tools:text="Teamlead Upvotes" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/prefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/c" />
+
+        <TextView
+            android:id="@+id/app_name"
+            style="@style/TextAppearance.Material3.DisplaySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="4dp"
+            android:layout_marginStart="30dp"
+            android:textFontWeight="600"
+            android:text="@string/fancy_app_name"
+            tools:text="elestidesk_" />
+    </FrameLayout>
 
     <TextView
-        android:id="@+id/introManager"
-        style="@style/TextAppearance.Material3.DisplaySmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textFontWeight="600"
+        android:fontFamily="sans-serif-smallcaps"
+        android:lineHeight="22dp"
+        android:paddingStart="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/introLead"
-        tools:text="Manager Gives" />
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+        android:text="@string/app_desc"
+        tools:text="Forget drafting a letter.\nForget getting it signed. \nGet your requests approved in a click. \nEasy automation. \nThe most needed automation." />
 
     <Button
         android:id="@+id/loginBtn"
@@ -46,9 +53,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="42dp"
         android:text="@string/login"
+        app:icon="@drawable/arrow"
+        android:layoutDirection="rtl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -58,6 +66,8 @@
         android:text="@string/signup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/loginBtn"
-        app:layout_constraintTop_toTopOf="@+id/loginBtn" />
+        app:layout_constraintTop_toTopOf="@+id/loginBtn"
+        android:visibility="gone"/>
+<!--  TODO: Nuke signup page after discussion  -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
