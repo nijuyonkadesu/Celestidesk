@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace 'one.njk.celestidesk'
-    compileSdk 33
+    compileSdk 34
 
     // Load properties file containing our API key
     Properties properties = new Properties()
@@ -23,7 +23,7 @@ android {
     defaultConfig {
         applicationId "one.njk.celestidesk"
         minSdk 30
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
