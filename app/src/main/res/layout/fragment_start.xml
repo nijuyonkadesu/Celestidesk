@@ -44,20 +44,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout"
         android:text="@string/app_desc"
-        tools:text="Forget drafting a letter.\nForget getting it signed. \nGet your requests approved in a click. \nEasy automation. \nThe most needed automation." />
+        tools:text="@string/app_desc" />
 
     <Button
         android:id="@+id/loginBtn"
         style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="42dp"
+        android:layout_marginBottom="48dp"
         android:text="@string/login"
         app:icon="@drawable/arrow"
         android:layoutDirection="rtl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginBtn"
+        android:text="@string/credits"
+        tools:text="@string/credits" />
 
     <Button
         android:id="@+id/signupBtn"

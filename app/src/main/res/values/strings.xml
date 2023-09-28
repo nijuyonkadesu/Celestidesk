@@ -63,4 +63,5 @@
     <string name="hint_duration">Duration</string>
     <string name="app_desc">Forget drafting a letter.\nForget getting it signed. \nGet your requests approved in a click. \nEasy automation. \nThe most needed automation.</string>
     <string name="fancy_app_name">elestidesk_</string>
+    <string name="credits"><![CDATA[Made with ❤️ by sriram & niyas]]></string>
 </resources>
