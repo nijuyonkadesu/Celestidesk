@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -99,12 +100,12 @@ class RequestFragment : Fragment() {
             _binding!!.fab.text = getString(fabHint)
         }
         addFilterChips(binding.filter, viewModel.stages, lifecycleScope)
-        val adapter = RequestListAdapter {
+        val adapter = RequestListAdapter ({
             lifecycleScope.launch {
                 if(currentRole != Role.EMPLOYEE)
                     showConfirmationDialog(it)
             }
-        }
+        }, { AppCompatResources.getDrawable(requireContext(), R.drawable.striking_text)!! })
         binding.requestList.adapter = adapter
 
         viewModel.requestsFlow.observe(viewLifecycleOwner) {
