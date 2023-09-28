@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.first
 import one.njk.celestidesk.network.auth.model.TokenResponse
 
 enum class Role {
-    EMPLOYEE, TEAM_LEAD, MANAGER
+    EMPLOYEE, TEAM_LEAD, MANAGER, EMERGENCY
 }
 
 class RolesDataStore(private val context: Context) {
@@ -41,6 +41,7 @@ class RolesDataStore(private val context: Context) {
         )
     }
 
+    // TODO: Refactor TokenResponse name
     suspend fun setToken(tokenResponse: TokenResponse) {
         Log.d("pref", "saved: ${tokenResponse.role}")
         setRole(tokenResponse.role)
