@@ -10,7 +10,7 @@ import one.njk.celestidesk.databinding.FragmentStartBinding
 
 class StartFragment: Fragment() {
 
-    lateinit var binding: FragmentStartBinding
+    private lateinit var binding: FragmentStartBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
