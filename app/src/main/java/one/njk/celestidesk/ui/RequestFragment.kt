@@ -1,6 +1,7 @@
 package one.njk.celestidesk.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -102,7 +103,11 @@ class RequestFragment : Fragment() {
                 if(currentRole != Role.EMPLOYEE)
                     showConfirmationDialog(it)
             }
-        }, { AppCompatResources.getDrawable(requireContext(), R.drawable.striking_text)!! })
+        }, { lifeLine ->
+            Log.d("bar", "Bar: $lifeLine")
+            if (lifeLine == 0) AppCompatResources.getDrawable(requireContext(), R.drawable.striking_text)
+            else null
+        })
         binding.requestList.adapter = adapter
 
         viewModel.requestsFlow.observe(viewLifecycleOwner) {

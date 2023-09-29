@@ -11,10 +11,10 @@ import one.njk.celestidesk.domain.BreakRequest
 
 class RequestListAdapter(
     private val exposeRequest: (BreakRequest) -> Unit,
-    private val strikeMe: () -> Drawable
+    private val strikeMe: (Int) -> Drawable?
 ): ListAdapter<BreakRequest, RequestListAdapter.ItemViewHolder>(DiffCallback) {
 
-    class ItemViewHolder(private val binding: RequestItemBinding, private val strikeMe: () -> Drawable):
+    class ItemViewHolder(private val binding: RequestItemBinding, private val strikeMe: (Int) -> Drawable?):
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(req: BreakRequest){
@@ -23,12 +23,13 @@ class RequestListAdapter(
                 reason.text = req.message
                 name.text = req.name
                 time.text = req.dateShort
-                elapsedDays.progress = req.getProgress()
-                if(elapsedDays.progress == 0) {
-                    reasonSubject.foreground = strikeMe()
-                    reason.foreground = strikeMe()
-                    name.foreground = strikeMe()
-                }
+                val lifeLine = req.getProgress()
+
+                elapsedDays.progress = lifeLine
+                reasonSubject.foreground = strikeMe(lifeLine)
+                reason.foreground = strikeMe(lifeLine)
+                name.foreground = strikeMe(lifeLine)
+
             }
         }
     }
