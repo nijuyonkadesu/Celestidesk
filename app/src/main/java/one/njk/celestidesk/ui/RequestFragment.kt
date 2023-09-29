@@ -98,16 +98,12 @@ class RequestFragment : Fragment() {
 
         addFilterChips(binding.filter, viewModel.stages, lifecycleScope)
 
-        val adapter = RequestListAdapter ({
+        val adapter = RequestListAdapter {
             lifecycleScope.launch {
-                if(currentRole != Role.EMPLOYEE)
+                if (currentRole != Role.EMPLOYEE)
                     showConfirmationDialog(it)
             }
-        }, { lifeLine ->
-            Log.d("bar", "Bar: $lifeLine")
-            if (lifeLine == 0) AppCompatResources.getDrawable(requireContext(), R.drawable.striking_text)
-            else null
-        })
+        }
         binding.requestList.adapter = adapter
 
         viewModel.requestsFlow.observe(viewLifecycleOwner) {

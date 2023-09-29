@@ -1,8 +1,9 @@
 package one.njk.celestidesk.adapters
 
-import android.graphics.drawable.Drawable
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,10 +12,9 @@ import one.njk.celestidesk.domain.BreakRequest
 
 class RequestListAdapter(
     private val exposeRequest: (BreakRequest) -> Unit,
-    private val strikeMe: (Int) -> Drawable?
 ): ListAdapter<BreakRequest, RequestListAdapter.ItemViewHolder>(DiffCallback) {
 
-    class ItemViewHolder(private val binding: RequestItemBinding, private val strikeMe: (Int) -> Drawable?):
+    class ItemViewHolder(private val binding: RequestItemBinding):
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(req: BreakRequest){
@@ -23,15 +23,22 @@ class RequestListAdapter(
                 reason.text = req.message
                 name.text = req.name
                 time.text = req.dateShort
-                val lifeLine = req.getProgress()
+                val lifeline = req.getProgress()
 
-                elapsedDays.progress = lifeLine
-                reasonSubject.foreground = strikeMe(lifeLine)
-                reason.foreground = strikeMe(lifeLine)
-                name.foreground = strikeMe(lifeLine)
-
+                elapsedDays.progress = lifeline
+                fineOrStrike(reasonSubject, lifeline)
+                fineOrStrike(reason, lifeline)
+                fineOrStrike(name, lifeline)
             }
         }
+
+        private fun fineOrStrike(textview: TextView, lifeLine: Int) {
+            textview.paintFlags = when(lifeLine){
+                0 -> textview.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                else -> textview.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            }
+        }
+
     }
     companion object DiffCallback : DiffUtil.ItemCallback<BreakRequest>() {
         override fun areItemsTheSame(oldItem: BreakRequest, newItem: BreakRequest): Boolean {
@@ -44,7 +51,7 @@ class RequestListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = RequestItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(view, strikeMe)
+        return ItemViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
