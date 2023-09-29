@@ -22,17 +22,12 @@ data class BreakRequest(
     val from: LocalDateTime,
     val to: LocalDateTime,
 ) {
-    // Target Format: "9 Day(s): 8 July to 17 July."
 
-    private var totalDays = run {
+    var totalDays = run {
         var days = (to.date - from.date).days.toDouble()
         if(days == 0.0) days = 1.0
         days
     }
-
-    val dateShort
-        get() =
-            "$totalDays Day(s): ${from.dayOfMonth} ${from.month} to ${to.dayOfMonth} ${to.month}"
 
     fun getProgress(): Int {
 
@@ -47,8 +42,6 @@ data class BreakRequest(
         Log.d("bar", "total: $totalDays, remaining: $remaining")
         return ((remaining / totalDays) * 100).toInt()
     }
-
-    // TODO: Replace these with calling string resources
 }
 /* Simulation area
 * Behaviour: as day come closer to the 'to' date, the bar reduces. otherwise, it starts with full

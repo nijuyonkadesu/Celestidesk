@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.NetworkResult
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CrisisManagerViewModel @Inject constructor(val repository: RequestRepository): ViewModel(), RoleAgreement {
-    override val name = "Crisis Manager here"
+    override val name = Role.EMERGENCY
     // "Processing" + "Reviewing" = "Pending"
     override val stages = listOf("Pending")
     override fun refreshRequests() {

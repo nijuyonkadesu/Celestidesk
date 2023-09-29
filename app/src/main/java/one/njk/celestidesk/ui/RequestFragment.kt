@@ -1,13 +1,11 @@
 package one.njk.celestidesk.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -82,7 +80,7 @@ class RequestFragment : Fragment() {
             .setValidator(DateValidatorPointForward.now())
 
         val dateRangePicker = MaterialDatePicker.Builder.dateRangePicker()
-                .setTitleText("Select dates")
+                .setTitleText(getString(R.string.select_dates_title))
                 .setCalendarConstraints(calendarConstraints.build())
                 .build()
 
@@ -91,7 +89,12 @@ class RequestFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            _binding!!.role.text = viewModel.name
+            _binding!!.role.text = when(viewModel.name){
+                Role.EMPLOYEE -> requireContext().getString(R.string.employee)
+                Role.TEAM_LEAD -> requireContext().getString(R.string.team_lead)
+                Role.MANAGER -> requireContext().getString(R.string.manager)
+                Role.EMERGENCY -> requireContext().getString(R.string.crisis_manager)
+            }
             _binding!!.fab.setIconResource(fabIcon)
             _binding!!.fab.text = getString(fabHint)
         }

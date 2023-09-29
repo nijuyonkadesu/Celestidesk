@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import one.njk.celestidesk.R
 import one.njk.celestidesk.databinding.NewRequestSheetBinding
 import one.njk.celestidesk.domain.NewBreakRequest
 import one.njk.celestidesk.network.NetworkResult
@@ -99,24 +100,26 @@ class NewRequestSheet(val datePicker: () -> Unit): BottomSheetDialogFragment() {
                 }
 
                 if(it.status is NetworkResult.Failed){
-                    Toast.makeText(requireContext(), "Please try again (or) You've used up all 5 requests this month! ", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.failure_new_request), Toast.LENGTH_LONG).show()
                 } else if (it.status is NetworkResult.Success) {
                     this@NewRequestSheet.dismiss()
-                    Toast.makeText(requireContext(), "Request successfully raised", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.success_new_request), Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
     private fun validateSubject(subject: String): String? {
-        if(subject.isEmpty()) return "Subject is empty!"
+        if(subject.isEmpty()) return getString(R.string.invalid_subject)
         return null
     }
     private fun validateReason(subject: String): String? {
-        if(subject.isEmpty()) return "Give a brief explanation"
+        if(subject.isEmpty()) return getString(R.string.invalid_reason)
         return null
     }
     private fun validateDuration(subject: String): String? {
-        if(subject.isEmpty() || subject.length < 22) return "Please choose the dates again"
+        if(subject.isEmpty() || subject.length < 22) return getString(R.string.invalid_dates)
         return null
     }
 

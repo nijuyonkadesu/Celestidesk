@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import one.njk.celestidesk.R
 import one.njk.celestidesk.databinding.RequestItemBinding
 import one.njk.celestidesk.domain.BreakRequest
 
@@ -22,7 +23,16 @@ class RequestListAdapter(
                 reasonSubject.text = req.subject
                 reason.text = req.message
                 name.text = req.name
-                time.text = req.dateShort
+                time.text = time.context.resources.getQuantityString(
+                    R.plurals.total_days,
+                    req.totalDays.toInt(),
+                    req.totalDays.toInt(),
+                    req.from.dayOfMonth,
+                    req.from.month.toString(),
+                    req.to.dayOfMonth,
+                    req.to.month.toString()
+                )
+
                 val lifeline = req.getProgress()
 
                 elapsedDays.progress = lifeline

@@ -54,14 +54,14 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun validateUsername(username: String): String? {
-        if(username.isEmpty()) return "Do not leave username empty!"
-        return null
+    fun validateUsername(username: String): Boolean {
+        return if(username.isEmpty())  true
+        else return false
     }
 
-    fun validatePassword(password: String): String? {
-        if(password.isEmpty()) return "Please type the password!"
-        return null
+    fun validatePassword(password: String): Boolean {
+        return if(password.isEmpty()) return true
+        else false
     }
 
     suspend fun authenticate(){

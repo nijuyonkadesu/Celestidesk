@@ -17,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import one.njk.celestidesk.R
 import one.njk.celestidesk.databinding.FragmentLoginBinding
 import one.njk.celestidesk.network.auth.model.AuthResult
 import one.njk.celestidesk.viewmodels.AuthViewModel
@@ -44,8 +45,14 @@ class LoginFragment: Fragment() {
                     val inputUsername = username.editText?.text.toString().trim()
                     val inputPassword = password.editText?.text.toString().trim()
 
-                    username.error = viewModel.validateUsername(inputUsername)
-                    password.error = viewModel.validatePassword(inputPassword)
+                    username.error = when(viewModel.validateUsername(inputUsername)){
+                        true -> requireContext().getString(R.string.invalid_username)
+                        false -> null
+                    }
+                    password.error = when(viewModel.validatePassword(inputPassword)){
+                        true -> requireContext().getString(R.string.invalid_password)
+                        false -> null
+                    }
 
                     if(username.error == null && password.error == null){
                         viewModel.logIn(inputUsername, inputPassword)
@@ -64,7 +71,7 @@ class LoginFragment: Fragment() {
                     findNavController().navigate(
                         LoginFragmentDirections.actionLoginFragmentToRequestFragment())
                 } else if(it.authResult !is AuthResult.ItsOk) {
-                    Toast.makeText(context, "Please login again", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.failure_login), Toast.LENGTH_SHORT).show()
                 }
             }
             submit.setOnEditorActionListener { view, event, _ ->

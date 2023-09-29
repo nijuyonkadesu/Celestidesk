@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.Stage
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EmployeeViewModel @Inject constructor(val repository: RequestRepository): ViewModel(), RoleAgreement {
-    override val name = "Employee Here"
+    override val name = Role.EMPLOYEE
 
     // "Processing" + "Reviewing" = "Pending"
     override val stages = listOf("Pending", "Accepted", "Rejected")
