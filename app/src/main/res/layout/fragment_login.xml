@@ -43,20 +43,22 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_username"
         android:paddingHorizontal="16dp"
+        app:layout_constraintVertical_bias="0.25"
         app:endIconMode="clear_text"
         app:errorEnabled="true"
-        app:layout_constraintBottom_toTopOf="@id/password"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/password"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
         app:startIconDrawable="@drawable/profile">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-
-            android:inputType="textPersonName"
-            android:importantForAutofill="yes"
             android:autofillHints="username"
+
+            android:imeOptions="actionNext"
+            android:importantForAutofill="yes"
+            android:inputType="textPersonName"
             tools:text="nijuyonkadesu" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -72,9 +74,9 @@
 
         android:autofillHints="password"
         app:endIconMode="password_toggle"
-        app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo">
+        app:layout_constraintTop_toBottomOf="@id/username">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -86,13 +88,14 @@
 
     <Button
         android:id="@+id/submit"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
         android:layout_marginBottom="48dp"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        app:icon="@drawable/arrow"
         android:layoutDirection="rtl"
+        android:text="@string/login"
+        app:icon="@drawable/arrow"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/password"
         app:layout_constraintStart_toStartOf="@+id/password"
         app:layout_constraintTop_toBottomOf="@+id/password" />

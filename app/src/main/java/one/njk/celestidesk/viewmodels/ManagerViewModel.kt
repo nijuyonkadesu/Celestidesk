@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.Decision
 import one.njk.celestidesk.network.DecisionRequest
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ManagerViewModel @Inject constructor(val repository: RequestRepository): ViewModel(), RoleAgreement {
-    override val name = "Manager Here"
+    override val name = Role.MANAGER
     // "Processing" + "Reviewing" = "Pending"
     override val stages = listOf("Pending")
     override fun refreshRequests() {

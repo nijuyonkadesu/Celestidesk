@@ -2,13 +2,14 @@ package one.njk.celestidesk.viewmodels
 
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.MutableStateFlow
+import one.njk.celestidesk.database.Role
 import one.njk.celestidesk.domain.BreakRequest
 import one.njk.celestidesk.network.DecisionRequest
 import one.njk.celestidesk.network.NetworkResult
 import one.njk.celestidesk.network.Stage
 
 interface RoleAgreement {
-    val name: String
+    val name: Role
     val requestsFlow: LiveData<List<BreakRequest>>
     val uiState: MutableStateFlow<RoleUiState>
     val state: LiveData<RoleUiState>

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import one.njk.celestidesk.R
 import one.njk.celestidesk.databinding.SearchItemBinding
 import one.njk.celestidesk.domain.History
 import one.njk.celestidesk.network.ActionResult
@@ -24,8 +25,7 @@ class SearchResultAdapter
                         subject.text = item.subject
                         message.text = item.message
                         action.text = item.action
-                        responder.text = "By: ${item.responder}"
-                        // TODO: call string resource formatter
+                        responder.text = responder.context.getString(R.string.responder, item.responder)
 
                         if (item.nowIn == ActionResult.REJECTED) action.setTextColor(Color.rgb(244, 67, 54))
                         else if (item.nowIn == ActionResult.EXPIRED) action.setTextColor(Color.rgb(255, 152, 0))

@@ -1,20 +1,21 @@
 package one.njk.celestidesk.adapters
 
-import android.graphics.drawable.Drawable
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import one.njk.celestidesk.R
 import one.njk.celestidesk.databinding.RequestItemBinding
 import one.njk.celestidesk.domain.BreakRequest
 
 class RequestListAdapter(
     private val exposeRequest: (BreakRequest) -> Unit,
-    private val strikeMe: () -> Drawable
 ): ListAdapter<BreakRequest, RequestListAdapter.ItemViewHolder>(DiffCallback) {
 
-    class ItemViewHolder(private val binding: RequestItemBinding, private val strikeMe: () -> Drawable):
+    class ItemViewHolder(private val binding: RequestItemBinding):
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(req: BreakRequest){
@@ -22,15 +23,32 @@ class RequestListAdapter(
                 reasonSubject.text = req.subject
                 reason.text = req.message
                 name.text = req.name
-                time.text = req.dateShort
-                elapsedDays.progress = req.getProgress()
-                if(elapsedDays.progress == 0) {
-                    reasonSubject.foreground = strikeMe()
-                    reason.foreground = strikeMe()
-                    name.foreground = strikeMe()
-                }
+                time.text = time.context.resources.getQuantityString(
+                    R.plurals.total_days,
+                    req.totalDays.toInt(),
+                    req.totalDays.toInt(),
+                    req.from.dayOfMonth,
+                    req.from.month.toString(),
+                    req.to.dayOfMonth,
+                    req.to.month.toString()
+                )
+
+                val lifeline = req.getProgress()
+
+                elapsedDays.progress = lifeline
+                fineOrStrike(reasonSubject, lifeline)
+                fineOrStrike(reason, lifeline)
+                fineOrStrike(name, lifeline)
             }
         }
+
+        private fun fineOrStrike(textview: TextView, lifeLine: Int) {
+            textview.paintFlags = when(lifeLine){
+                0 -> textview.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                else -> textview.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            }
+        }
+
     }
     companion object DiffCallback : DiffUtil.ItemCallback<BreakRequest>() {
         override fun areItemsTheSame(oldItem: BreakRequest, newItem: BreakRequest): Boolean {
@@ -43,7 +61,7 @@ class RequestListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = RequestItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(view, strikeMe)
+        return ItemViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
