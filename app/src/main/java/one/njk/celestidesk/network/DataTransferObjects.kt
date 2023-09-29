@@ -12,7 +12,7 @@ data class NetworkPendingRequestContainer(
 
 data class NetworkPendingRequest(
     @Json(name = "_id") val id: String,
-    val origin: String,
+    val origin: OriginEmbed,
     val subject: String,
     val message: String,
     var emergency: Boolean = false,
@@ -23,6 +23,9 @@ data class NetworkPendingRequest(
     @Json(name = "__v") val v: Int
 )
 
+data class OriginEmbed (
+    val name: String
+)
 
 enum class Stage {
     ACCEPTED, REJECTED, IN_PROCESS, IN_REVIEW, PENDING
@@ -43,7 +46,7 @@ fun NetworkPendingRequestContainer.asDatabaseModel(): List<DatabasePendingReques
     return requests.map {
         DatabasePendingRequest(
             id = it.id,
-            origin = it.origin,
+            origin = it.origin.name,
             subject = it.subject,
             message = it.message,
             status = it.status,

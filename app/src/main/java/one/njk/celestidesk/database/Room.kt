@@ -41,7 +41,7 @@ interface TransactionDao {
     fun invalidateCache()
 }
 
-@Database(entities = [DatabasePendingRequest::class, DatabaseTransaction::class, FtsTransaction::class], version = 2, exportSchema = false)
+@Database(entities = [DatabasePendingRequest::class, DatabaseTransaction::class, FtsTransaction::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RequestDatabase: RoomDatabase() {
     abstract val requestsDao: RequestsDao
