@@ -89,7 +89,7 @@ class RequestFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            _binding!!.role.text = when(viewModel.name){
+            _binding!!.included.role.text = when(viewModel.name){
                 Role.EMPLOYEE -> requireContext().getString(R.string.employee)
                 Role.TEAM_LEAD -> requireContext().getString(R.string.team_lead)
                 Role.MANAGER -> requireContext().getString(R.string.manager)
@@ -99,7 +99,7 @@ class RequestFragment : Fragment() {
             _binding!!.fab.text = getString(fabHint)
         }
 
-        addFilterChips(binding.filter, viewModel.stages, lifecycleScope)
+        addFilterChips(binding.included.filter, viewModel.stages, lifecycleScope)
 
         val adapter = RequestListAdapter {
             lifecycleScope.launch {
@@ -107,7 +107,7 @@ class RequestFragment : Fragment() {
                     showConfirmationDialog(it)
             }
         }
-        binding.requestList.adapter = adapter
+        binding.included.requestList.adapter = adapter
 
         viewModel.requestsFlow.observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -115,9 +115,9 @@ class RequestFragment : Fragment() {
 
         viewModel.state.observe(viewLifecycleOwner) {
             if(it.isLoading) {
-                binding.loading.visibility = View.VISIBLE
+                binding.included.loading.visibility = View.VISIBLE
             } else {
-                binding.loading.visibility = View.INVISIBLE
+                binding.included.loading.visibility = View.INVISIBLE
             }
         }
 
@@ -137,7 +137,7 @@ class RequestFragment : Fragment() {
                 * */
             }
         }
-        binding.refresh.apply {
+        binding.included.refresh.apply {
             setOnRefreshListener {
                 viewModel.refreshRequests()
                 isRefreshing = false
